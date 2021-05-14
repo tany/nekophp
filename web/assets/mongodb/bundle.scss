@@ -1,0 +1,80 @@
+// mongodb
+
+.mongodb-header {
+  top: 0;
+  z-index: 1030;
+  width: 100%;
+  min-height: 51px;
+  border-top: 1px solid #1c6;
+  border-bottom: 1px solid #c7c7c7;
+  background: #e4e4e4;
+  padding: 0px 10px 0;
+  .dropdown {
+    align-self: flex-start;
+    margin: 7px 2px 0;
+  }
+  .navbar-collapse {
+    margin-bottom: 7px;
+  }
+  .navbar-collapse .dropdown:last-of-type {
+    margin-right: 10px;
+  }
+  .search {
+    align-self: flex-start;
+    margin: 10px 2px 2px;
+  }
+  .navbar-toggler {
+    align-self: flex-start;
+    margin-top: 6px;
+  }
+  .dropdown-menu {
+    position: absolute;
+    left: -1px;
+  }
+}
+.mongodb-main {
+  padding: 50px 0 69px;
+}
+.mongodb-footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 70px;
+  padding: 15px 10px 0;
+  border-top: 1px solid rgba(0,0,0,.12);
+  background: rgba(255,255,255,.8);
+  background: rgba(250,250,250,.8);
+  text-align: center;
+}
+.mongodb-form-container {
+  margin: 60px 20px 40px;
+  .input-json {
+    height: calc(100vh - 180px);
+    padding: 5px;
+    line-height: 1.2;
+  }
+}
+.mongodb-data-table {
+  .sticky-top-start, .sticky-top {
+    top: 50px !important;
+  }
+  th:first-of-type:before {
+    display: block;
+    content: attr(data-num);
+  }
+  .input-json {
+    padding: 10px;
+  }
+  .input-json textarea {
+    width: calc(100vw - 80px);
+    height: calc(100vh - 173px);
+    padding: 5px;
+    line-height: 1.2;
+  }
+}
+
+// field type
+.type-integer, .type-double, .type-float { color: #05e; text-align: right; }
+.type-boolean { color: #05e; }
+.type-array { color: #b55; }
+.type-object { color: #093; }

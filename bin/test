@@ -1,0 +1,32 @@
+#!/bin/sh
+
+PHP_INI="./bin/php-cli.ini"
+
+cd $(dirname $(cd $(dirname $0); pwd))
+
+if [ ! -s $PHP_INI ]; then
+  echo "Error: $PHP_INI: No such file"
+  exit
+fi
+
+name=${1:-unknown}
+
+if [ $name = "code" ]; then
+  /usr/bin/env php -c $PHP_INI -r '
+    print "\n";
+    require "src/test/code/phpcs.php";
+    require "src/test/code/phpmd.php";
+  '
+elif [ $name = "benchmark" ]; then
+  /usr/bin/env php -c $PHP_INI -r '
+    print "\n";
+    require "src/test/benchmark/Syntax.php";
+  ' -- $2
+else
+  /usr/bin/env php -c $PHP_INI -r '
+    print "\n";
+    print "  bin/test code       # Code Checker\n";
+    print "  bin/test benchmark  # PHP Benchmark\n";
+    print "\n";
+  '
+fi
