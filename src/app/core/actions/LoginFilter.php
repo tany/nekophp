@@ -15,6 +15,6 @@ trait LoginFilter {
     if (Core::$user) return;
 
     $required = $this->loginRequired ?? true;
-    return $required ? $this->locate('/login') : null;
+    if ($required) $this->response->render('core/views/login/index');
   }
 }

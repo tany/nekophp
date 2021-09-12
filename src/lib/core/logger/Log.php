@@ -26,7 +26,7 @@ class Log {
     $data = preg_replace("/\n/", "\n  ", trim(self::export($data)));
     $data = sprintf('%s | %6s | %-5s | %s', $time, $pid, $level, $data);
 
-    error_log("{$data}\n", 3, self::$file);
+    if (self::$file) error_log("{$data}\n", 3, self::$file);
   }
 
   protected static function export($data) {

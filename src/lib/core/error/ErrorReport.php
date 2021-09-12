@@ -2,26 +2,67 @@
 namespace core\error;
 
 use \core\error\ErrorCode;
+use \core\logger\Log;
 
 class ErrorReport {
 
   public static $uncompiledFile;
 
-  protected $type;
   protected $title;
+  protected $message;
   protected $views;
-
-  public static function setUncompiledFile($file) {
-    self::$uncompiledFile ??= $file;
-  }
 
   public function __construct($e) {
     while (ob_get_level()) ob_get_clean();
     ob_start();
 
-    $this->type = ErrorCode::TEXTS[$e->getCode()] ?? '?';
-    $this->title = self::correctTitle($e);
+    match (get_class($e)) {
+      'Elasticsearch\Common\Exceptions\BadRequest400Exception' => $this->setElasticTitle($e),
+      'MongoDB\Driver\Exception\BulkWriteException' => $this->setMongoTitle($e),
+      default => $this->setDefaultTitle($e),
+    };
 
+    if (ACCEPT === 'application/json') {
+      print json_encode_pretty(['title' => $this->title, 'message' => $this->message]);
+    } elseif (ACCEPT === 'text/html') {
+      $this->buildViews($e);
+      require 'views/report_html.php';
+    } else {
+      print "\n{$this->title}: {$this->message}\n\n";
+      print "#- {$e->getFile()}({$e->getLine()})\n";
+      print preg_replace('/:.*/', '', $e->getTraceAsString()) . "\n";
+    }
+  }
+
+  public static function setUncompiledFile($file) {
+    self::$uncompiledFile ??= $file;
+  }
+
+  protected function setDefaultTitle($e) {
+    $this->title = ErrorCode::TEXTS[$e->getCode()] ?? 'Script Error';
+    $this->message = $e->getMessage();
+    if (!$this->message) $this->message = 'Uncaught ' . get_class($e);
+  }
+
+  protected function setElasticTitle($e) {
+    $json = json_decode($e->getMessage(), true);
+
+    $this->title = '[elastic] ' . ($json['error']['type'] ?? 'exception');
+    $this->message = $json['error']['reason'] ?? 'unknown reason';
+
+    if ($caused = $json['error']['caused_by'] ?? null) {
+      $this->message .= "\n\n- {$caused['type']}\n- {$caused['reason']}";
+    }
+    // http_response_code($json['status']);
+  }
+
+  protected function setMongoTitle($e) {
+    foreach ($e->getWriteResult()->getWriteErrors() as $err) $msg[] = $err->getMessage();
+    $this->title = 'MongoDB Error';
+    $this->message = join('; ', $msg ?? []);
+  }
+
+  protected function buildViews($e) {
     $file = self::$uncompiledFile;
     if ($file && is_file($file)) $this->appendView($e->getFile(), $e->getLine(), $file);
 
@@ -30,7 +71,11 @@ class ErrorReport {
 
     $this->views[] = [
       'name' => 'Trace Log',
-      'data' => $this->trace($e),
+      'data' => $this->traceback($e),
+    ];
+    $this->views[] = [
+      'name' => 'Application Log',
+      'data' => $this->tailLog(),
     ];
   }
 
@@ -47,16 +92,6 @@ class ErrorReport {
     ];
   }
 
-  protected static function correctTitle($e) {
-    if (is_a($e, 'MongoDB\Driver\Exception\BulkWriteException')) {
-      foreach ($e->getWriteResult()->getWriteErrors() as $err) {
-        $msg[] = $err->getMessage();
-      }
-      return join('; ', $msg ?? []);
-    }
-    return $e->getMessage();
-  }
-
   protected function highlight($source, $line) {
     $sline  = ($line - 5) > 0 ? $line - 5 : 0;
     foreach (array_slice(explode("\n", $source), $sline, 9) as $idx => $str) {
@@ -70,7 +105,7 @@ class ErrorReport {
     return $data ?? [];
   }
 
-  protected function trace($e) {
+  protected function traceback($e) {
     foreach (explode("\n", $e->getTraceAsString()) as $str) {
       $data = explode(' ', $str, 2);
       $logs[] = ['key' => $data[0], 'val' => $data[1]];
@@ -78,19 +113,13 @@ class ErrorReport {
     return $logs;
   }
 
-  public function render() {
-    http_response_code(500);
-
-    if (ACCEPT === 'application/json') {
-      $data = ['error' => $this->title];
-      if (MODE === 'development') {
-        $data['items'] = [$this->views[0]['name']];
-      }
-      print json_encode_pretty($data);
-    } elseif (ACCEPT === 'text/html') {
-      require 'views/report_html.php';
-    } else {
-      require 'views/report_text.php';
+  protected function tailLog() {
+    if (!is_file($file = Log::$file)) return [];
+    $size = filesize($file);
+    $data = file_get_contents(Log::$file, false, null, $size - 2500, 2500);
+    foreach (explode("\n", trim($data)) as $line) {
+      $logs[] = ['key' => '-', 'val' => $line];
     }
+    return $logs ?? [];
   }
 }

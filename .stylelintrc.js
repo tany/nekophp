@@ -1,0 +1,53 @@
+module.exports = {
+  'extends': [
+    'stylelint-config-recommended',
+    'stylelint-config-property-sort-order-smacss',
+  ],
+  'plugins': [
+    'stylelint-scss'
+  ],
+  'rules': {
+    'at-rule-no-vendor-prefix': true,
+    'block-no-empty': true,
+    'color-hex-length': 'short',
+    'color-named': ['never', { ignoreProperties: ['/composes/'] }],
+    // 'color-no-hex': true,
+    'color-no-invalid-hex': true,
+    'comment-no-empty': true,
+    'declaration-block-no-duplicate-custom-properties': true,
+    'declaration-block-no-redundant-longhand-properties': true,
+    'declaration-block-no-shorthand-property-overrides': true,
+    // 'declaration-no-important': true,
+    'font-family-name-quotes': 'always-where-recommended',
+    'font-weight-notation': 'numeric',
+    'function-calc-no-invalid': true,
+    'function-calc-no-unspaced-operator': true,
+    'function-linear-gradient-no-nonstandard-direction': true,
+    'function-url-no-scheme-relative': true,
+    'length-zero-no-unit': true,
+    'media-feature-name-no-vendor-prefix': true,
+    'no-descending-specificity': null,
+    'no-duplicate-at-import-rules': true,
+    'no-duplicate-selectors': true,
+    'no-empty-source': true,
+    'no-extra-semicolons': true,
+    'no-invalid-double-slash-comments': true,
+    'no-invalid-position-at-import-rule': true,
+    'no-unknown-animations': true,
+    'order/order': ['custom-properties', 'declarations', 'rules', 'at-rules'],
+    'property-no-unknown': [true, { ignoreProperties: ['/composes/'] }],
+    'property-no-vendor-prefix': true,
+    'selector-no-vendor-prefix': true,
+    'selector-pseudo-class-no-unknown': true,
+    'selector-pseudo-element-no-unknown': true,
+    'selector-type-no-unknown': true,
+    'shorthand-property-no-redundant-values': true,
+    'string-no-newline': true,
+    // 'value-no-vendor-prefix': true,
+    'unit-no-unknown': true,
+  },
+  'ignoreFiles': [
+    'web/assets/stable/**',
+    'web/assets/vendor/**'
+  ]
+}

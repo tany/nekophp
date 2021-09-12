@@ -1,0 +1,49 @@
+#!/bin/sh
+
+cd $(dirname $(cd $(dirname $0); pwd))
+
+printf "# Git log\n"
+git log -1 --oneline --pretty=format:'%h %s (%cd) %an' --date=format:'%Y/%m/%d %H:%M:%S'
+
+printf "\n# Composer install\n"
+composer install
+
+printf "\n# npm install\n"
+npm install
+
+printf "\n# Nginx user\n"
+nginx=`grep user /etc/nginx/nginx.conf`
+nginx=`printf "${nginx}" | sed -r 's/user (.*);/\1/'`
+printf "${nginx}\n"
+
+printf "\n# Directory Permission\n"
+
+stat=`stat -c 'log/ %a' log`
+permission=`printf "${stat}" | sed -r 's/.*(.)$/\1/'`
+if [ $permission -lt 6 ]; then
+  printf "${stat} ... is not writable?\n"
+else
+  printf "${stat}\n"
+fi
+
+stat=`stat -c 'tmp/ %a' tmp`
+permission=`printf "${stat}" | sed -r 's/.*(.)$/\1/'`
+if [ $permission -lt 6 ]; then
+  printf "${stat} ... is not writable?\n"
+else
+  printf "${stat}\n"
+fi
+
+printf "\n# Remove Caches\n"
+
+printf "remove tmp/cache/*\n"
+rm -rf tmp/cache/*
+
+printf "remove tmp/cache.lock\n"
+rm -rf tmp/cache.lock
+
+printf "remove web/.assets/*\n"
+rm -rf web/.assets/*
+
+printf "\n----"
+printf "\nPlease confirm this log.\n"

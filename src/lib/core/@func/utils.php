@@ -139,7 +139,7 @@ function url_merge_query($url, $params) {
 // URLに現在のクエリパラメータを引き継ぐ
 // function url_next($path) {
 //   //return rtrim(preg_replace('/(\?|&)do=.*?(?:&|$)/', '\\1', $path), '?&');
-//   if (!$query = Core::$request->getQuery()) return $path;
+//   if (!$params = Core::$request->params()) return $path;
 //   unset($query['do']);
 //   return url_merge_query($path, $query);
 // }

@@ -5,22 +5,23 @@ use \core\error\ErrorReport;
 
 class Engine {
 
-  public $code;
   public $yield;
+
   protected $scope;
-  protected $views;
+  protected $path;
+  protected $partials = [];
 
   public function __construct($scope) {
     $this->scope = $scope;
   }
 
-  public function includePath($paths) {
-    $this->views = $paths;
+  public function includePath($path) {
+    $this->path = $path;
     return $this;
   }
 
-  public function setPartials($paths) {
-    $this->partials = $paths;
+  public function setPartials($partials) {
+    $this->partials = $partials;
     return $this;
   }
 
@@ -32,7 +33,10 @@ class Engine {
   }
 
   public function renderFrom($file, $from) {
-    return $this->render($file);
+    if (!$path = $this->findFrom($file, $from)) {
+      throw new \Exception(__METHOD__ . "(): missing template: {$file}");
+    }
+    return $this->renderFile($path);
   }
 
   public function renderOverview($file) {
@@ -40,26 +44,31 @@ class Engine {
     return $this->render($file);
   }
 
-  public function renderPartial($file) {
-    $path = $this->partials[$file] ?? null;
-    if ($path) return $this->render($path);
+  public function renderPartial($name, $from) {
+    $file = $this->partials[$name] ?? null;
+    return $file ? $this->renderFrom($file, $from) : $this;
   }
 
   protected function find($file) {
-    if (!extname($file)) $file .= ".html.php";
-    if ($file[0] === '/') return APP . $file;
+    if (!extname($file)) $file .= '.php';
 
-    foreach ($this->views as $dir) {
-      $path = stream_resolve_include_path("{$dir}/{$file}");
-      if ($path) return $path;
-    }
-    return;
+    if ($file[0] === '/') return $file;
+    if (str_contains($file, '/')) return APP . '/' . $file;
+    return APP . '/' . "{$this->path}/{$file}";
+  }
+
+  protected function findFrom($file, $from) {
+    if (!extname($file)) $file .= '.php';
+
+    if ($file[0] === '/') return $file;
+    if (str_contains($file, '/')) return APP . '/' . $file;
+    return dirname($from) . "/{$file}";
   }
 
   protected function renderFile($file) {
-    $closure = function($file) {
+    $view = $this;
+    $closure = function($file) use ($view) {
       $request = $this->request;
-      $view = $this->view;
       void($request, $view);
       include $file;
     };

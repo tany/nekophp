@@ -1,0 +1,110 @@
+// Loading Spinner
+.core-loading {
+  position: fixed;
+  z-index: 2000;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(244,244,244,.3);
+  .spinner-border {
+    width: 5rem;
+    height: 5rem;
+  }
+}
+
+// Table
+.data-table {
+  width: max-content;
+  font-size: var(--font-size-sm);
+  > thead {
+    border-top: 1px solid var(--border-color-dark);
+  }
+  > tbody {
+    background: #fff;
+  }
+  > :not(caption) > tr:nth-child(even) {
+    background: #fbfbfb;
+  }
+  > :not(caption) > * > * {
+    padding: .4rem .5rem;
+    border: 1px solid var(--border-color-dark);
+    font-weight: 400;
+    vertical-align: top;
+  }
+  > :not(caption) > * > th {
+    background: var(--bg-light);
+  }
+  .row-link:hover > th {
+    background: #ddb;
+  }
+  .row-link:hover > td {
+    background: #eec;
+  }
+  .row-link-disabled {
+    cursor: auto;
+  }
+  .td-icon, .td-check {
+    width: 40px;
+    padding: 0;
+    text-align: center;
+    vertical-align: middle;
+  }
+  .td-icon .dropdown-menu {
+    top: -.1rem !important;
+    left: -.2rem !important;
+  }
+}
+.table-db {
+  border-spacing: 0;
+  border-collapse: separate;
+  > :not(caption) > * > * {
+    border-width: 0 1px 1px 0;
+  }
+  > :not(caption) > * > th:first-of-type {
+    position: -webkit-sticky;
+    position: sticky;
+    left: 0;
+    border-left-width: 1px;
+  }
+  > :not(caption) > * > th:last-of-type {
+    border-right-width: 1px;
+  }
+  > thead > * > th {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 50px;
+  }
+  > thead > * > th:first-of-type {
+    z-index: 1021;
+  }
+  > :not(caption) > * > td {
+    &.type-integer, &.type-double, &.type-float {
+      color: #05e;
+      text-align: right;
+    }
+    &.type-boolean {
+      color: #05e;
+    }
+    &.type-array {
+      color: #b44;
+    }
+    &.type-object {
+      color: #092;
+    }
+    &.type-NULL {
+      color: #999;
+    }
+    .pre-value {
+      margin: 0;
+      font: inherit;
+      white-space: pre-wrap;
+    }
+    .input-json {
+      width: calc(100vw - 85px);
+      height: calc(100vh - 175px);
+      padding: .5rem;
+      line-height: 1.2;
+    }
+  }
+}

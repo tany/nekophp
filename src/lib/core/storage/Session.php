@@ -48,7 +48,7 @@ class Session {
     unset($_SESSION[$key]);
   }
 
-  public static function getData() {
+  public static function data() {
     if (!self::$started) self::start();
     return $_SESSION;
   }

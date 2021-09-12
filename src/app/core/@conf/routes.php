@@ -4,9 +4,9 @@
 /login              core/Login
 /logout             core/Login#logout
 
-/test               core/Tests
-/test/:id           core/Tests
-/test/*path         core/Tests
+/example            core/Examples
+/example/:id        core/Examples
+/example/*path      core/Examples
 
 # errors
 @error/:code        core/Errors

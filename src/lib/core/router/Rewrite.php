@@ -4,9 +4,9 @@ namespace core\router;
 class Rewrite {
 
   public static function rewritePath($request) {
-    $path = $request->getPath();
+    $path = $request->path();
 
-    if ($request->getHost() === 'www.neko.vm') {
+    if ($request->host() === 'www.neko.vm') {
       return "@site{$path}";
     }
 
@@ -27,8 +27,9 @@ class Rewrite {
   }
 
   public static function rewriteAction($request, $action) {
-    if ($do = $request->do) {
-      return $do[0] !== '_' ? $do : abort(404);
+    if (preg_match('/\?_(\w+)(&|$)/', $request->url(), $m)) {
+      $action = $m[1];
+      return $action[0] === '_' ? abort(404) : $action;
     }
     if ($action === 'REST/show') {
       if ($request->isPut()) return 'updateResource';

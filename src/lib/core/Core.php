@@ -17,7 +17,7 @@ class Core {
   public static $site;
 
   public static function initialize() {
-    class_alias(self::class, 'Core');
+    class_alias(self::class, 'Core'); // for view
 
     define('ENV', $_ENV); //filter_input_array(INPUT_ENV));
     define('SERVER', $_SERVER); //filter_input_array(INPUT_SERVER));
@@ -65,10 +65,10 @@ class Core {
     $time = $now;
 
     $trace = debug_backtrace()[1] ?? debug_backtrace()[0];
-    $log[] = "{$elapsed} ms";
-    $log[] = ($trace['class'] ?? null) . "#{$trace['function']}";
-    $log[] = "{$trace['file']}:{$trace['line']}";
+    $logs[] = "{$elapsed} ms";
+    $logs[] = ($trace['class'] ?? null) . "#{$trace['function']}";
+    $logs[] = "{$trace['file']}:{$trace['line']}";
 
-    log_debug(join(' - ', $log));
+    log_debug(join(' - ', $logs));
   }
 }

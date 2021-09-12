@@ -1,7 +1,13 @@
 {
     "require": {
-        "phpmd/phpmd": "^2.6",
-        "squizlabs/php_codesniffer": "^3.4",
-        "wimg/php-compatibility": "^9.1"
-    }
+        "elasticsearch/elasticsearch": "^7.14"
+    },
+    "require-dev": {
+        "php-webdriver/webdriver": "^1.11",
+        "phpcompatibility/php-compatibility": "*",
+        "phpmd/phpmd": "^2.10",
+        "phpunit/phpunit": "^9.5",
+        "squizlabs/php_codesniffer": "3.*"
+    },
+    "prefer-stable" : true
 }

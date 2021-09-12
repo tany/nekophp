@@ -6,33 +6,41 @@ use \core\Core;
 class Pager {
 
   public static $defaults = [
-    'param' => 'page',
+    'param' => 'p',
+    'limit' => 40,
     'width' => 3,
-    'limit' => 10,
   ];
 
   public $param;
-  public $width;
   public $limit;
+  public $width;
+  public $total;
   public $page;
   public $link;
-  public $size;
   public $skip;
 
   /**
    * @param int|array $items
-   * @param array $options [param:, width:, limit:, page:, link:]
+   * @param int $options['total']
+   * @param int $options['limit']
+   * @param int $options['width']
+   * @param string $options['param']
+   * @param string $options['link']
    */
-  public function __construct($items, $options = []) {
+  public function __construct($options = []) {
+    $this->total = $options['total'] ?? null;
     $this->param = $options['param'] ?? self::$defaults['param'];
-    $this->width = $options['width'] ?? self::$defaults['width'];
     $this->limit = $options['limit'] ?? self::$defaults['limit'];
+    $this->width = $options['width'] ?? self::$defaults['width'];
 
-    $request = Core::$request;
-    $this->page = (int)($options['page'] ?? $request->{$this->param} ?? 1);
-    $this->link = $options['link'] ?? $request->getUrl();
-    $this->size = is_int($items) ? $items : count($items);
+    $this->page = (int)($options['page'] ?? Core::$request->{$this->param} ?? 1);
+    $this->link = $options['link'] ?? Core::$request->url();
     $this->skip = ($this->page - 1) * $this->limit; // for db
+  }
+
+  public function total($val) {
+    $this->total = is_int($val) ? $val : count($val);
+    return $this;
   }
 
   public function limit($val) {
@@ -46,12 +54,12 @@ class Pager {
   }
 
   protected function calculate() {
-    $width = $this->width;
+    $total = $this->total;
     $limit = $this->limit;
+    $width = $this->width;
     $page = $this->page;
-    $size = $this->size;
 
-    $last = (int)ceil($size / $limit) ?: 1;
+    $last = (int)ceil($total / $limit) ?: 1;
     $prev = ($page > 1) ? $page - 1 : 0;
     $next = ($page < $last) ? $page + 1 : 0;
 

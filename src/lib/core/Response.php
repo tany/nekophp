@@ -1,100 +1,122 @@
 <?php
 namespace core;
 
-use \core\utils\MimeType;
+use \core\Core;
 use \core\storage\Cache;
+use \core\utils\MediaType;
+use \core\view\Engine;
 
 class Response {
 
-  public $header = [];
-  public $code;
-  public $file;
-  public $data;
+  protected $headers = [];
+  protected $status;
+  protected $body;
+  protected $file;
+  protected $ready;
 
-  public function header($val, $replace = true) {
-    $this->header[] = [$val, $replace];
+  public function __construct($scope) {
+    $this->scope = $scope;
+  }
+
+  public function isReady() {
+    return $this->ready || $this->headers;
+  }
+
+  public function header($val) {
+    $this->headers[] = $val;
     return $this;
   }
 
-  public function setCode($code) {
-    $this->code = $code;
+  public function status($status) {
+    $this->status = $status;
     return $this;
   }
 
-  public function locate($url, $code = 302) {
-    $this->setCode($code);
+  public function location($url, $status = null) {
+    $url ??= Core::$request->path();
     $this->header("Location: {$url}");
+    if ($status) $this->status($status);
     return $this;
   }
 
-  public function setContentType($mime, $unknown = 'application/octet-stream') {
-    if (!str_contains($mime, '/')) $mime = MimeType::fromName("f.{$mime}", $unknown);
-    return $this->header("Content-Type: {$mime}");
+  public function type($type, $unknown = 'application/octet-stream') {
+    if (!str_contains($type, '/')) $type = MediaType::search("f.{$type}", $unknown);
+    return $this->header("Content-Type: {$type}");
   }
 
-  public function setAttachment($filename) {
-    return $this->header("Content-Disposition: attachment; filename*=UTF-8''" . rawurlencode($filename));
+  public function filename($filename, $disposition = 'attachment') {
+    return $this->header("Content-Disposition: {$disposition}; filename*=UTF-8''" . rawurlencode($filename));
   }
 
-  public function sendFile($file, $filename = null) {
-    $this->file = $file;
+  public function file($file, $filename = null) {
     $filename ??= basename($file);
-    $this->setContentType($filename, 'application/force-download');
-    $this->setAttachment($filename);
-    //$this->header('X-Accel-Redirect', $file);
+    $this->type($filename)->filename($filename);
+    match (setting('core.action.internalRedirection')) {
+      'X-Accel-Redirect' => $this->header('X-Accel-Redirect: ' . str_replace(ROOT, '/x-accel', $file)),
+      'X-SendFile' => $this->header("X-SendFile: {$file}"),
+      default => ($this->file = $file),
+    };
     return $this;
   }
 
-  public function sendData($data, $filename = null) {
-    $this->data = $data;
-    if ($filename) {
-      $this->setContentType($filename, 'application/force-download');
-      $this->setAttachment($filename);
-    }
+  public function body($data, $filename = null) {
+    $this->ready = true;
+    $this->body = $data;
+    if ($filename) $this->type($filename)->filename($filename);
     return $this;
   }
 
-  public function sendJson($data, $filename = null) {
-    $this->data = json_encode_pretty($data);
-    $this->header('Content-Type: application/json');
-    if ($filename) $this->setAttachment($filename);
+  public function json($data, $filename = null) {
+    $this->ready = true;
+    $this->body = json_encode_pretty($data);
+    $this->type('application/json');
+    if ($filename) $this->filename($filename);
     return $this;
   }
 
   // public function cache() {
   //   $since = SERVER['HTTP_IF_MODIFIED_SINCE'] ?? 0;
   //   strtotime($since);
-
-  //   if (Cache::$keep) {
-  //     return $this->setCode(304);
-  //   }
+  //   if (Cache::$keep) return $this->status(304);
   //   $this->header[] = 'Last-Modified: ' . gmdate('D, d M Y H:i:s', $mtime) . ' GMT';
   //   return;
   // }
 
-  public function sendHeaders() {
-    foreach ($this->header as [$val, $replace]) {
-      header($val, $replace);
-    }
-    if ($this->code) {
-      http_response_code($this->code);
-    }
+  public function render($file = null, $overview = true) {
+    $this->ready = true;
+
+    $scope = $this->scope;
+    $path = str_snake(strtr($scope::class, '\\', '/'));
+    $path = substr_replace($path, '/views', strpos($path, '/'), 8);
+
+    $view = new Engine($scope);
+    $view->includePath($path)->render($file ?? $scope->action);
+    if (!$overview) return $this;
+
+    $view->setPartials($overviews = setting($scope::$overview));
+    $view->renderOverview($overview === true ? $overviews['page-root'] : $overview);
+    return $this;
   }
 
   public function capture() {
+    $this->ready = null;
     return ob_capture();
   }
 
   public function flash() {
-    $this->sendHeaders();
+    foreach ($this->headers as $val) {
+      header($val);
+    }
+    if ($this->status) {
+      http_response_code($this->status);
+    }
 
     if ($this->file) {
       ob_end_clean();
       readfile($this->file);
-    } elseif ($this->data) {
+    } elseif ($this->body !== null) {
       ob_end_clean();
-      print $this->data;
+      print $this->body;
     }
-    return $this;
   }
 }

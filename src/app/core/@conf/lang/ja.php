@@ -10,10 +10,12 @@ return [
   'core.confirm.delete' => '本当に削除してよろしいですか？',
 
   // Alert
-  'core.alert.create' => 'データを作成しました。',
-  'core.alert.update' => 'データを更新しました。',
-  'core.alert.delete' => 'データを削除しました。',
-  'core.alert.login.failed' => 'サインインに失敗しました。',
+  'core.alert.login.done' => 'サインインしました。',
+  'core.alert.login.fail' => 'サインインに失敗しました。',
+  'core.alert.logout.done' => 'サインアウトしました。',
+  'core.alert.created' => '作成しました。',
+  'core.alert.updated' => '更新しました。',
+  'core.alert.deleted' => '削除しました。',
 
   // Error
   'core.error.blank' => '入力してください。',

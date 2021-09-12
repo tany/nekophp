@@ -24,12 +24,13 @@ class ErrorHandler {
    *   ->(Exception $e)
    */
   public static function except($e) {
+    http_response_code(500);
     log_error($e->getMessage() . "\n" . $e->getTraceAsString());
 
     if (defined('MODE') && MODE === 'production') exit;
 
     self::$error = $e;
-    (new ErrorReport($e))->render();
+    new ErrorReport($e);
     exit;
   }
 }

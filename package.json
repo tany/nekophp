@@ -1,6 +1,6 @@
 {
   "name": "neko",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "index.js",
   "repository": "git@github.com:tany/neko.git",
   "author": "Neko PHP Project",
@@ -8,27 +8,31 @@
   "scripts": {
     "devel": "webpack --config webpack.config.js --mode development",
     "watch": "webpack --config webpack.config.js --mode development --watch --progress",
-    "build": "webpack --config webpack.config.js --mode production"
+    "build": "webpack --config webpack.config.js --mode production",
+    "stylelint": "stylelint web/assets/**/*.scss || echo -- stylelint --"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.15.3",
-    "bootstrap": "^5.0.0-beta3",
-    "bootstrap-icons": "^1.4.1",
+    "bootstrap": "^5.1.1",
+    "bootstrap-icons": "^1.5.0",
     "jquery": "^3.6.0",
     "jquery-form": "^4.3.0",
-    "js-cookie": "^2.2.1",
+    "js-cookie": "^3.0.1",
     "mdn-polyfills": "^5.20.0",
     "moment": "^2.29.1",
     "moment-locales-webpack-plugin": "^1.2.0"
   },
   "devDependencies": {
-    "@babel/runtime": "^7.13.10",
-    "css-loader": "^5.2.0",
-    "mini-css-extract-plugin": "^1.4.0",
-    "sass": "^1.32.8",
-    "sass-loader": "^11.0.1",
-    "string-replace-loader": "^3.0.1",
-    "webpack": "^5.30.0",
-    "webpack-cli": "^4.6.0"
+    "@babel/runtime": "^7.15.4",
+    "css-loader": "^6.2.0",
+    "mini-css-extract-plugin": "^2.3.0",
+    "sass": "^1.39.2",
+    "sass-loader": "^12.1.0",
+    "string-replace-loader": "^3.0.3",
+    "stylelint": "^13.13.1",
+    "stylelint-config-property-sort-order-smacss": "^7.1.0",
+    "stylelint-config-recommended-scss": "^4.3.0",
+    "stylelint-scss": "^3.20.1",
+    "webpack": "^5.52.1",
+    "webpack-cli": "^4.8.0"
   }
 }

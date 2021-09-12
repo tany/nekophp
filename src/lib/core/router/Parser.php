@@ -75,7 +75,7 @@ class Parser {
     foreach ($routes as $regex => $route) {
       if (preg_match($regex, $path, $m)) {
         foreach ($route[2] ?? [] as $i => $n) {
-          $request->$n = $m[$i + 1];
+          $request->$n = rawurldecode($m[$i + 1]);
         }
         return $route;
       }

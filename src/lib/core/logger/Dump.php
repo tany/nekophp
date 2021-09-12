@@ -6,7 +6,8 @@ use \core\storage\Cache;
 class Dump {
 
   protected static $logs = [];
-  protected static $hr;
+  protected static $ids = [];
+  protected static $tmp;
 
   public static function shutdown() {
     if (defined('MODE') && MODE === 'production') return self::log();
@@ -22,20 +23,45 @@ class Dump {
   }
 
   public static function store(...$values) {
-    foreach ($values as $data) {
-      if (!$data || is_bool($data)) {
-        $logs[] =  var_export($data, true);
-      } elseif (is_scalar($data)) {
-        $logs[] =  print_r($data, true);
-      } else {
-        $data = print_r($data, true);
-        if (!mb_check_encoding($data, 'UTF-8')) $data = mb_convert_encoding($data, 'UTF-8');
-        $data = preg_replace('/\n\s*\(/', ' (', $data);
-        $data = preg_replace('/\)\n\n/', ")\n", $data);
-        $logs[] = rtrim($data);
-      }
+    foreach ($values as $value) {
+      self::$tmp = '';
+      self::export($value);
+      self::$logs[] = rtrim(self::$tmp);
     }
-    self::$logs = array_merge(self::$logs, $logs ?? []);
+  }
+
+  protected static function export($data, $depth = 0, $join = false) {
+    $indent = str_repeat('  ', $depth + 1);
+    if (!$join) self::$tmp .= str_repeat('  ', $depth);
+
+    if (is_null($data)) {
+      self::$tmp .= '<null>' . "\n";
+    } elseif (is_bool($data)) {
+      self::$tmp .= var_export($data, true) . ' <bool>' . "\n";
+    } elseif (is_scalar($data)) {
+      self::$tmp .= print_r($data, true) . ' <' . gettype($data) . '>' . "\n";
+    } elseif (is_array($data)) {
+      self::$tmp .= '<array>' . "\n";
+      foreach ($data as $key => $val) {
+        self::$tmp .= "{$indent}[{$key}] => ";
+        self::export($val, $depth + 1, true);
+      }
+    } elseif (is_object($data)) {
+      $id = spl_object_id($data);
+      self::$tmp .= '<' . get_class($data) . "> #{$id}\n";
+
+      if (isset(self::$ids[$id])) return;
+      self::$ids[$id] = true;
+
+      $object = new \ReflectionClass($data);
+      foreach ($object->getProperties() as $key => $prop) {
+        self::$tmp .= "{$indent}[{$prop->name}] => ";
+        $prop->setAccessible(true);
+        self::export($prop->getValue($data), $depth + 1, true);
+      }
+    } else {
+      self::$tmp .= get_type($data) . "\n";
+    }
   }
 
   protected static function elapsed() {
@@ -46,8 +72,9 @@ class Dump {
 
   protected static function log() {
     if (!self::$logs) return;
-    $str = join("\n", self::$logs);
-    log_debug((str_contains($str, "\n") ? "\n" : '') . $str);
+    foreach (self::$logs as $str) {
+      log_debug($str);
+    }
   }
 
   protected static function renderCli() {
@@ -85,14 +112,15 @@ class Dump {
       position: fixed; z-index: 1080; left: 3px;
       background: rgba(30,34,38,.88);
       box-shadow: 1px 1px 5px rgba(0,0,0,.6);
-      color: #bbb; font: 12px/1.4 'Segoe UI',monospace;
+      color: #c2c2c2; font: 12px/1.4 'Segoe UI',monospace;
     ";
     $styles[] = "
       display: block; {$background} bottom: 50px;
       width: min({$width}px, calc(100vw - 55px)); min-width: 200px;
-      height: min({$height}px, calc(100vh - 55px)); min-height: 50px;
+      height: min({$height}px, calc(100vh - 70px)); min-height: 50px;
       padding: 5px 6px; border: 0;
       resize: none; outline:0 !important; -webkit-appearance:none;
+      word-spacing: .25rem;
     ";
     $styles[] = "
       {$background} bottom: 20px;

@@ -14,6 +14,7 @@ class Loader {
     define('WEB', "{$root}/web");
 
     spl_autoload_register([self::class, 'loadClass']);
+    require ROOT . '/vendor/autoload.php';
   }
 
   public static function include(...$paths) {
@@ -21,7 +22,8 @@ class Loader {
   }
 
   public static function loadClass($class) {
-    require strtr($class, '\\', DIRECTORY_SEPARATOR) . '.php';
-    //if ($path = stream_resolve_include_path($file)) require $path;
+    // return require strtr($class, '\\', DIRECTORY_SEPARATOR) . '.php';
+    $file = strtr($class, '\\', DIRECTORY_SEPARATOR) . '.php';
+    if ($path = stream_resolve_include_path($file)) require $path;
   }
 }

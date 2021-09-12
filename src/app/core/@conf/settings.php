@@ -2,6 +2,9 @@
 
 return [
 
+  // Application version
+  'core.version' => '0.0.2',
+
   // Environment Mode (development, production)
   'core.mode' => 'development',
 
@@ -32,4 +35,16 @@ return [
 
   // Log File
   'core.log.file' => LOG . '/application.log',
+
+  // Internal Redirection (X-Accel-Redirect, X-SendFile)
+  'core.action.internalRedirection' => 'X-Accel-Redirect',
+
+  // Overviews
+  'core.overview.default' => [
+    'page-root'   => 'core/overviews/default/page-root',
+    'page-header' => 'core/overviews/default/page-header',
+    'page-navi'   => 'core/overviews/default/page-navi',
+    'page-body'   => 'core/overviews/default/page-body',
+    'page-footer' => 'core/overviews/default/page-footer',
+  ],
 ];

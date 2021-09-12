@@ -7,14 +7,17 @@ global.bootstrap = require('bootstrap')
 global.moment = require('moment')
 global.Cookies = require('js-cookie')
 
-// javascripts
+/**
+ * JavaScripts
+ */
 import 'jquery-form'
 // import 'mdn-polyfills/Element.prototype.closest.js'
 // import 'mdn-polyfills/String.prototype.endsWith'
 // import 'mdn-polyfills/String.prototype.startsWith.js'
-// import 'mdn-polyfills/String.prototype.trim.js'
 
-// stylesheets
+/**
+ * StyleSheets
+ */
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './web/assets/vendor/bootstrap-icons/font.css'
 import './web/assets/vendor/fontawesome-free/font.css'

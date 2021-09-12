@@ -7,6 +7,6 @@ class AccessorClass {
   use ArrayAccess;
 
   public function __construct($data = []) {
-    $this->data = $data;
+    $this->_data = $data;
   }
 }

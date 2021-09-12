@@ -3,30 +3,30 @@ namespace core\feature;
 
 trait Accessor {
 
-  protected $data = [];
+  protected $_data = [];
 
   public function __isset($key) {
-    return isset($this->data[$key]);
+    return isset($this->_data[$key]);
   }
 
   public function __get($key) {
-    return $this->data[$key] ?? null;
+    return $this->_data[$key] ?? null;
   }
 
   public function __set($key, $val) {
-    $this->data[$key] = $val;
+    $this->_data[$key] = $val;
   }
 
   public function __unset($key) {
-    unset($this->data[$key]);
+    unset($this->_data[$key]);
   }
 
-  public function getData() {
-    return $this->data;
+  public function data() {
+    return $this->_data;
   }
 
   public function setData($data, $reset = false) {
-    $this->data = $reset ? $data : $data + $this->data;
+    $this->_data = $reset ? $data : $data + $this->_data;
     return $this;
   }
 }

@@ -17,7 +17,7 @@ class Cache {
     self::$driver = $conf['core.cache.driver'];
     self::$expires = $conf['core.cache.expires'];
     self::$lock = $conf['core.cache.lock'];
-    self::$path = $conf['core.cache.path'];
+    self::$path = $conf['core.cache.path'] . '/' . $conf['core.version'];
     self::$time = is_file(self::$lock) ? filemtime(self::$lock) : 0;
     self::$keep = self::$time + self::$expires >= TIME;
   }

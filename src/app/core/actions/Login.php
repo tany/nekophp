@@ -19,18 +19,25 @@ class Login extends \core\Action {
 
   protected function login($request) {
     $data = $request->data;
-
     $user = User::findByName($data['username']);
+    //(new User)->authenticate($data['username'] ?? null, $data['password'] ?? null);
 
     Core::$user = $user ? AuthToken::login($user) : null;
-    if (Core::$user) return $this->locate('/');
 
-    return $this->alert('core.alert.login.failed', 'danger')->render();
+    if (!Core::$user) {
+      return $this->fail(401, lc('core.alert.login.fail'));
+    }
+
+    $path = $data['path'] ?? '/';
+    if ($path[0] !== '/' || $path === '/login') $path = '/';
+
+    $this->done($path, 200, lc('core.alert.login.done'));
   }
 
   public function logout($request) {
     AuthToken::logout();
 
-    return $this->locate('/login');
+    //$this->done('/login', 200, lc('core.alert.logout.done'));
+    $this->alert(lc('core.alert.logout.done'))->location('/login', 200);
   }
 }

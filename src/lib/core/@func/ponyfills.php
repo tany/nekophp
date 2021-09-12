@@ -4,23 +4,28 @@
 // String
 
 // キャメルケース文字列に変換する
-function str_camel($str) {
-  return str_replace(' ', '', ucwords(preg_replace('/[_\-]+/', ' ', preg_replace('/([^a-zA-Z0-9]+)/', '$1 ', $str))));
+function str_camel($str, $replaceMarks = false) {
+  return lcfirst(preg_replace('/ /', '', ucwords(preg_replace('/[\-_]+/', ' ', $str))));
+}
+
+// パスカルケース文字列に変換する
+function str_pascal($str) {
+  return preg_replace('/ /', '', ucwords(preg_replace('/[\-_]+/', ' ', $str)));
 }
 
 // ハイフン区切り文字列に変換する
-function str_kebab($str) {
-  return strtolower(preg_replace('/([a-z])([A-Z])/', '$1-$2', $str));
+function str_chain($str) {
+  return preg_replace("/[\s\-_]+/", '-', strtolower(preg_replace('/([a-z])([A-Z])/', '$1-$2', $str)));
 }
 
 // アンダースコア区切り文字列に変換する
 function str_snake($str) {
-  return strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $str));
+  return preg_replace("/[\s\-_]+/", '_', strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $str)));
 }
 
 // スペース区切り文字列に変換する
-function str_space($str) {
-  return strtolower(preg_replace('/([a-z])([A-Z])/', '$1 $2', $str));
+function str_space($str, $replaceMarks = false) {
+  return preg_replace("/[\s\-_]+/", ' ', strtolower(preg_replace('/([a-z])([A-Z])/', '$1 $2', $str)));
 }
 
 // 文字列を読みやすい感じにする

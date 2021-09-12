@@ -3,9 +3,8 @@
 global.Core = require('./javascripts/Core.js')
 
 // Bootstrap - Tooltips
-let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-let tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
-  return new bootstrap.Tooltip(tooltipTriggerEl)
+document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) {
+  return new bootstrap.Tooltip(el)
 })
 
 // Disable enter key submittion
@@ -20,78 +19,68 @@ $('.js-next-link').each(function() {
 })
 
 // Nav - activate
-$('.nav-link').each(function(idx, link) {
-  let href = link.getAttribute('href')
+$('.nav-link').each(function() {
+  let href = this.getAttribute('href')
   let check = (href === '/') ? location.pathname === '/' : location.pathname.indexOf(href) === 0
-  link.classList.toggle('active', check)
+  this.classList.toggle('active', check)
 })
 
 // Row - link
 $('.row-link').each(function() {
-  let href = this.dataset.href || $(this).find('a:first').attr('href')
+  let href = this.dataset.href || this.querySelector('a:first-child')?.getAttribute('href')
   if (!href) return
   $(this).css('cursor', 'pointer').on('click', function(ev) {
-    if ($(ev.target).is('a') || $(ev.target).closest('a,.row-link-disabled').length) return
+    if (ev.target.tagName === 'A' || ev.target.closest('a,.row-link-disabled')) return
     if (window.getSelection().isCollapsed) window.location = href
   })
 })
 
 // List - select
-$('.js-list-select').on('click', function(ev) {
-  let target = this.dataset.target ?? 'id'
-  $(`input[name="${target}"]`).prop('checked', true)
-  ev.preventDefault()
-  return false
+$('.js-list-select').each(function() {
+  Core.restish.setListSelect($(this))
 })
 
 // List - deselect
-$('.js-list-deselect').on('click', function(ev) {
-  let target = this.dataset.target ?? 'id'
-  $(`input[name="${target}"]`).prop('checked', false)
-  ev.preventDefault()
-  return false
+$('.js-list-deselect').each(function() {
+  Core.restish.setListDeselect($(this))
 })
 
 // List - delete
-$('.js-list-delete').on('click', function(ev) {
-  let target = this.dataset.target ?? 'id'
-  let values = $(`input[name="${target}"]:checked`).map((_, el) => $(el).val()).get()
-  if (values.length === 0) return false
-
-  $.ajax({ data: { _method: 'DELETE', id: values }, dataType: 'json', type: 'POST', url: this.dataset.href ?? '.' })
-    .then(Core.doneRESTish).catch(Core.failRESTish)
-  ev.preventDefault()
+$('.js-list-delete').each(function() {
+  Core.restish.setListDelete($(this))
 })
 
 // REST - create
-$('.js-rest-create').on('click', function(ev) {
-  let form = $(this).closest('form')
-  let url = form.attr('action') ?? '.'
-
-  form.ajaxSubmit({ dataType: 'json', type: 'POST', url: url }).data('jqxhr')
-    .then(Core.doneRESTish).catch(Core.failRESTish)
-  ev.preventDefault()
-  Core.disableButton(this)
+$('.js-rest-create').each(function() {
+  Core.restish.setCreate($(this))
 })
 
 // REST - update
-$('.js-rest-update').on('click', function(ev) {
-  let form = $(this).closest('form')
-  let url = form.attr('action') ?? '?'
-
-  form.ajaxSubmit({ data: { _method: 'PUT' }, dataType: 'json', type: 'POST', url: url }).data('jqxhr')
-    .then(Core.doneRESTish).catch(Core.failRESTish)
-  ev.preventDefault()
-  Core.disableButton(this)
+$('.js-rest-update').each(function() {
+  Core.restish.setUpdate($(this))
 })
 
 // REST - delete
-$('.js-rest-delete').on('click', function(ev) {
-  if (!Core.confirm(this.dataset.confirm)) return false
-  let url = this.getAttribute('href') ?? this.dataset.href ?? '?'
-
-  $.ajax({ data: { _method: 'DELETE' }, dataType: 'json', type: 'POST', url: url })
-    .then(Core.doneRESTish).catch(Core.failRESTish)
-  ev.preventDefault()
-  Core.disableButton(this)
+$('.js-rest-delete').each(function() {
+  Core.restish.setDelete($(this))
 })
+
+// Form
+$('.js-form-submit').each(function() {
+  Core.restish.setAjaxSubmit($(this))
+})
+
+// Clipboard - copy
+$('.js-clipboard-copy').each(function() {
+  Core.clipboard.setCopy($(this))
+})
+
+// $('.js-clipboard-copy').on('click', function(ev) {
+//   let el = ev.currentTarget
+//   let icon = $(el.querySelector('.bi'))
+
+//   Core.clipboard.copy(el.nextElementSibling)
+//   icon.toggleClass('bi-clipboard bi-check2')
+//   setTimeout(() => icon.toggleClass('bi-clipboard bi-check2'), 1000)
+//   ev.preventDefault()
+// })
