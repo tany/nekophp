@@ -1,12 +1,10 @@
-'use strict'
-
-const path = require('path')
-const moment = require('moment')
-const MomentLocalesPlugin = require('moment-locales-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const path = require('path');
+const moment = require('moment');
+const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = (env, argv) => {
-  const development = argv.mode.match(/dev/)
+  const development = argv.mode.match(/dev/);
 
   return {
     cache: true,
@@ -40,18 +38,18 @@ module.exports = (env, argv) => {
               options: {
                 sourceMap: true,
                 url: false,
-              }
+              },
             },
             {
               loader: 'sass-loader',
               options: {
                 sassOptions: { outputStyle: 'compressed' },
                 sourceMap: true,
-              }
+              },
             },
           ],
         },
-      ]
+      ],
     },
     performance: { hints: false },
     plugins: [
@@ -63,5 +61,5 @@ module.exports = (env, argv) => {
       ignored: ['**/node_modules', '**/tmp', '**/*.log', '**/*.php'],
       poll: 300,
     },
-  }
-}
+  };
+};

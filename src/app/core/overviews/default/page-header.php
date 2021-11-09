@@ -16,9 +16,9 @@
         <li><a class="dropdown-item" href="#">Your Profile</a></li>
         <li><a class="dropdown-item" href="#">Your ...</a></li>
         <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item" href="#" onclick="Core.disableAjaxSubmit(this); return false">Disable ajaxSubmit</a></li>
+        <li><a class="dropdown-item" href="#" onclick="core.disableAjaxSubmit(this); return false">Disable ajaxSubmit</a></li>
         <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item js-logout" href="/logout">Sign out</a></li>
+        <li><a class="dropdown-item js-ajax-link id-logout" href="/logout">Sign out</a></li>
       </ul>
     </div>
   @else

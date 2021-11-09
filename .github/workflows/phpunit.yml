@@ -17,11 +17,8 @@ jobs:
           - 8080:80
     steps:
       - name: Checkout
-        uses: actions/checkout@master
+        uses: actions/checkout@v2
 
-      # - name: APT Packages ... Install
-      #   run: |
-      #     sudo apt-get install -y chromium-chromedriver
       - name: ChromeDriver ... Install
         run: |
           VER=`wget -q -O - https://chromedriver.storage.googleapis.com/LATEST_RELEASE`
@@ -62,6 +59,15 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
       - name: Composer ... Install dependencies
         run: composer install --prefer-dist
+
+      - name: npm ... Install
+        uses: actions/setup-node@v2
+        with:
+          node-version: '15'
+          cache: 'npm'
+      - run: |
+          npm install
+          npm run build
 
       - name: Nginx Settings
         run: |

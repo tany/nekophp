@@ -20,7 +20,7 @@ sudo apt install -y php8.0 \
 sudo systemctl start php8.0-fpm
 sudo systemctl enable php8.0-fpm
 
-## Source
+## Source code
 mkdir /var/www/neko && cd $_
 git clone -b master git@github.com:tany/nekophp.git .
 chmod -R 777 log tmp
@@ -30,19 +30,15 @@ curl -sS https://getcomposer.org/installer | php
 sudo mv composer.phar /usr/local/bin/composer
 composer install --no-dev
 
-## Nginx
-sudo ln -s /var/www/neko/conf/server/nginx.conf /etc/nginx/conf.d/neko.conf
-sudo nginx -t
-sudo systemctl restart nginx
-```
-
-### Settings
-
-```sh
-sudo vi /etc/nginx/conf.d/neko.conf
-
+## Settings
 cp conf/examples/settings.php conf/
 vi conf/settings.php
+
+## Nginx
+sudo ln -s /var/www/neko/conf/server/nginx.conf /etc/nginx/conf.d/neko.conf
+sudo vi /etc/nginx/conf.d/neko.conf
+sudo nginx -t
+sudo systemctl restart nginx
 ```
 
 ## Development
@@ -55,6 +51,7 @@ npm install
 
 npm run watch      # Development
 npm run build      # Deployment
+npm run eslint     # ESLint
 npm run stylelint  # Stylelint
 ```
 
@@ -73,5 +70,6 @@ bin/phpmd  # PHP Mess Detector
 
 ## Release Notes
 
+- 0.0.3 Elasticsearch stats
 - 0.0.2 Elasticsearch index
 - 0.0.1 MongoDB

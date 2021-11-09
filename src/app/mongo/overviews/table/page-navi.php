@@ -1,12 +1,9 @@
 <script>
-  window.onload = function() {
-    $('textarea').on('click', function() {
-      $('.dropdown-menu').removeClass('show')
-    })
-
-    var q = $('#db-query').val()
-    if (q) $('#db-query').focus()[0].setSelectionRange(q.length, q.length)
-  }
+  document.addEventListener('DOMContentLoaded', () => {
+    if (!document.querySelector('#main form')) {
+      core.Form.focusField('#db-query')
+    }
+  })
 </script>
 
 <nav class="core-db-navi position-fixed d-flex">
@@ -16,8 +13,6 @@
       {$this->conn->name}</span>
     <ul class="dropdown-menu">
       <li><a class="dropdown-item" href="/mongo">Disconnect</a></li>
-      <li><hr class="dropdown-divider"></li>
-      <li><a class="dropdown-item" href="/">Home</a></li>
     </ul>
   </div>
 
@@ -26,11 +21,11 @@
       role="button" data-bs-toggle="dropdown" aria-expanded="false">
       {$request->db ?? 'Select Database'}</span>
     <ul class="dropdown-menu">
-      <li><a class="dropdown-item" href="/mongo/db/">Select Database</a></li>
+      <li><a class="dropdown-item" href="/mongo/{$request->client}/">Select Database</a></li>
       <li><hr class="dropdown-divider"></li>
       @foreach $this->conn->databases() as $item
-        <?php $class = ($item->name === $request->db) ? 'active'  : ''; ?>
-        <li><a class="dropdown-item {$class}" href="/mongo/db/{$item->name}/">{$item->name}</a></li>
+        <?php $class = ($item->name === $request->db) ? 'active' : ''; ?>
+        <li><a class="dropdown-item {$class}" href="/mongo/{$request->client}/{$item->name}/">{$item->name}</a></li>
       @end
     </ul>
   </div>
@@ -41,11 +36,12 @@
         role="button" data-bs-toggle="dropdown" aria-expanded="false">
         {$request->coll ?? 'Select Collection'}</span>
       <ul class="dropdown-menu">
-        <li><a class="dropdown-item" href="/mongo/db/{$request->db}/">Select Collection</a></li>
+        <li><a class="dropdown-item" href="/mongo/{$request->client}/{$request->db}/">Select Collection</a></li>
         <li><hr class="dropdown-divider"></li>
         @foreach $this->conn->collections($request->db) as $item
-          <?php $class = ($item->name === $request->coll) ? 'active'  : ''; ?>
-          <li><a class="dropdown-item {$class}" href="/mongo/db/{$request->db}/{$item->name}/">{$item->name}</a></li>
+          <?php $class = ($item->name === $request->coll) ? 'active' : ''; ?>
+          <li><a class="dropdown-item {$class}"
+            href="/mongo/{$request->client}/{$request->db}/{$item->name}/">{$item->name}</a></li>
         @end
       </ul>
     </div>

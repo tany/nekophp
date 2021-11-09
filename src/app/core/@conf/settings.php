@@ -3,7 +3,7 @@
 return [
 
   // Application version
-  'core.version' => '0.0.2',
+  'core.version' => '0.0.3',
 
   // Environment Mode (development, production)
   'core.mode' => 'development',

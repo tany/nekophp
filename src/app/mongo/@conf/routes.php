@@ -1,6 +1,6 @@
 // Routes
 
-/mongo                     mongo/Main
-/mongo/db/:db              mongo/Databases#REST
-/mongo/db/:db/:coll        mongo/Collections#REST
-/mongo/db/:db/:coll/:id    mongo/Documents#REST
+/mongo                        mongo/Main
+/mongo/:client/:db            mongo/Databases#REST
+/mongo/:client/:db/:coll      mongo/Collections#REST
+/mongo/:client/:db/:coll/:id  mongo/Documents#REST

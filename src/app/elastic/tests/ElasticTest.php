@@ -8,7 +8,7 @@ return new class extends \core\Test {
 
   public function __invoke() {
     // before
-    $this->index .=  time();
+    $this->index .= time();
 
     // Login
     $this->visit('/login');
@@ -42,8 +42,8 @@ return new class extends \core\Test {
     $this->click('.data-table thead .td-icon .js-next-link');
 
     // Index
-    $this->visit('/elastic/index/');
-    $tr = ".data-table tbody tr[data-href='{$this->index}/']";
+    $tr = ".data-table tbody tr[data-id='{$this->index}']";
+    $this->visit('/elastic/default/');
     $this->click("{$tr} .td-icon:last-child", false);
     $this->click("{$tr} .td-icon:last-child .js-rest-delete");
     $this->click('.modal-footer .btn:last-child');

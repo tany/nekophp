@@ -16,8 +16,8 @@ class AnyDocument extends Document {
     return AnyField::sortFields($items);
   }
 
-  public function fieldManager($name) {
-    return new AnyField($this->$name);
+  public function values($name) {
+    return new AnyValue($this->$name);
   }
 
   public function hrefId() {

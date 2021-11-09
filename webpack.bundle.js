@@ -1,7 +1,6 @@
-'use strict'
+// JavaScripts
+import './web/assets/core/bundle';
+import './web/assets/elastic/bundle';
 
-// javascripts
-import './web/assets/core/bundle.js'
-
-// stylesheets
-import './web/assets/core/bundle.scss'
+// StyleSheets
+import './web/assets/core/bundle.scss';

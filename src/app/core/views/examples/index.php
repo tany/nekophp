@@ -1,9 +1,3 @@
-<script>
-  window.onload = function() {
-    //
-  }
-</script>
-
 <article class="page-article">
   <header class="page-article-header">
     <h1 class="page-article-title">Examples</h1>
@@ -30,10 +24,12 @@
             #{lc('core.alert.created')}
 
           </td></tr><tr><td>Javascript</td><td>
-            <a href="#" onclick="Core.modal.alert({ message: moment() }); return false">moment</a>
-            / <a href="#" onclick="Core.modal.alert({ title: 'Title', message: '<s>Message\nMessage</s>' }); return false">Alert</a>
-            / <a href="#" onclick="Core.modal.confirm({ message: 'Message Only' }); return false">Confirm</a>
-            / <a href="#" onclick="Core.loading.wait(); setTimeout(Core.loading.stop, 1000); return false">Load</a>
+            <a href="#" onclick="core.Modal.alert({ message: moment() }); return false">moment</a>
+            / <a href="#" onclick="core.Modal.alert({ title: 'Title' }); return false">Alert1</a>
+            / <a href="#" onclick="core.Modal.alert({ message: '<s>Message</s>' }); return false">Alert2</a>
+            / <a href="#" onclick="core.Modal.alert({ title: 'Title', message: '<s>Message</s>' }); return false">Alert3</a>
+            / <a href="#" onclick="core.Modal.confirm({ message: 'Message Only' }); return false">Confirm</a>
+            / <a href="#" onclick="core.Loading.start(); setTimeout(core.Loading.stop, 1000); return false">Load</a>
 
           </td></tr><tr><td>Send Data</td><td>
             <a href="?_sendData">Data</a>

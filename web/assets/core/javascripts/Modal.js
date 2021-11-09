@@ -1,67 +1,70 @@
-'use strict'
+export default class Modal {
 
-module.exports = class Modal {
-
-  static id = 'core-modal-alert'
+  static id = 'core-modal';
 
   static alert(params) {
-    $(`#${Modal.id}`).remove()
+    if ($_ = document.querySelector(`#${Modal.id}`)) $_.remove();
 
-    let html = $(Modal._getTemplate(Object.assign({
+    const data = {
       header: params.title,
       body: params.message,
-      footer: `<button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal">OK</button>`,
-    }, params)))
+      footer: '<button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal">OK</button>',
+    };
+    const html = Modal.getTemplate(Object.assign(data, params));
+    const modal = new bootstrap.Modal(html[0]);
 
-    let modal = new bootstrap.Modal(html[0])
-    modal.show()
+    return new Promise(resolve => {
+      modal.show();
+      html.on('hide.bs.modal', () => resolve());
+    });
   }
 
   static confirm(params) {
-    $(`#${Modal.id}`).remove()
+    if ($_ = document.querySelector(`#${Modal.id}`)) $_.remove();
 
-    let html = $(Modal._getTemplate(Object.assign({
+    const data = {
       header: params.title,
       body: params.message,
       footer: `
         <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancel</button>
         <button type="button" class="btn btn-sm btn-primary">OK</button>
       `,
-    }, params)))
-
-    let modal = new bootstrap.Modal(html[0])
+    };
+    const html = Modal.getTemplate(Object.assign(data, params));
+    const modal = new bootstrap.Modal(html[0]);
 
     return new Promise((resolve, reject) => {
-      modal.show()
-      html.find('.btn-primary').on('click', () => resolve(1))
-      html.on('hide.bs.modal', () => reject(2))
-    })
+      modal.show();
+      html.find('.btn-primary').on('click', () => resolve());
+      html.on('hide.bs.modal', () => reject());
+    });
   }
 
-  static _getTemplate(params = []) {
-    if (params.body) params.body = Modal._convertBody(params.body)
+  static getTemplate(params = {}) {
+    if (params.body) params.body = Modal.convertBody(params.body);
 
-    return `
+    return $(`
       <div id="${Modal.id}" class="modal" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-      <div class="modal-content type-${params.type}">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable ${params.class}">
+      <div class="modal-content">
         <div class="modal-header">${params.header ?? ''}</div>
         <div class="modal-body">${params.body ?? ''}</div>
         <div class="modal-footer">${params.footer ?? ''}</div>
       </div></div></div>
-    `
+    `);
   }
 
-  static _convertBody(data, html = '') {
+  static convertBody(data, html = '') {
     if (Array.isArray(data)) {
-      html += '<ul>'
-      for (let item of data) html = this._convertAlertBody(item, html)
-      html += '</ul>'
-    } else if (html) {
-      html += '<li>' + String(data).replace(/\r?\n/g, '<br>') + '</li>'
-    } else {
-      html += '<div>' + String(data).replace(/\r?\n/g, '<br>') + '</div>'
+      html += '<ul>';
+      data.forEach(item => {
+        html = this.convertAlertBody(item, html);
+      });
+      html += '</ul>';
+      return html;
     }
-    return html
+    data = String(data).replace(/\r?\n/g, '<br>');
+    html += html ? `<li>${data}</li>` : `<div>${data}</div>`;
+    return html;
   }
 }

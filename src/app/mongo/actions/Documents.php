@@ -52,21 +52,21 @@ class Documents extends \core\Action {
     $item = $this->model();
     $item->jsonUnserialize($request->data['json'])->save();
 
-    $this->done(rawurlencode($item->_id), 201);
+    $this->done(['status' => 201, 'location' => rawurlencode($item->_id)]);
   }
 
   public function updateResource($request) {
     $item = $this->model()->find($request->id) ?? abort(404);
     $item->jsonUnserialize($request->data['json'])->save();
 
-    $this->done(rawurlencode($item->_id), 204);
+    $this->done(['status' => 204, 'location' => rawurlencode($item->_id)]);
   }
 
   public function deleteResource($request) {
     $item = $this->model()->find($request->id) ?? abort(404);
     $item->delete();
 
-    $this->done('.', 204);
+    $this->done(['status' => 204, 'location' => '.']);
   }
 
   public function deleteResources($request) {
@@ -75,7 +75,7 @@ class Documents extends \core\Action {
       ->where(['_id' => ['$in' => $ids]])
       ->deleteAll();
 
-    $this->done('.', 204);
+    $this->done(['status' => 204, 'location' => '.']);
   }
 
   public function createTest($request) {
@@ -100,6 +100,6 @@ class Documents extends \core\Action {
     ], true);
     $item->save();
 
-    $this->done('.', 201);
+    $this->done(['status' => 201, 'location' => '.']);
   }
 }

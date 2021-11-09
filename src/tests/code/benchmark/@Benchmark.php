@@ -3,10 +3,10 @@ namespace benchmark;
 
 class Benchmark {
 
-  protected static $times = 1000000;
-  protected static $length = 30;
-  protected static $caption;
-  protected static $target;
+  public static $times = 1000000;
+  public static $length = 30;
+  public static $caption;
+  public static $target;
 
   public static function initialize() {
     error_reporting(E_ALL);

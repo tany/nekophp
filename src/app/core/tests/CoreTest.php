@@ -15,6 +15,6 @@ return new class extends \core\Test {
 
     // Logout
     $this->click('.page-header .dropdown', false);
-    $this->click('.page-header .dropdown-menu .js-logout');
+    $this->click('.page-header .dropdown-menu .id-logout');
   }
 };

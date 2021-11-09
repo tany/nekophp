@@ -1,10 +1,10 @@
 // Bundle
-@import "stylesheets/bootstrap.scss";
-@import "stylesheets/core.scss";
+@import "stylesheets/bootstrap";
+@import "stylesheets/core";
 
 // Standard
 :root {
-  --bs-font-monospace: 'Roboto Mono',SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono','Courier New',monospace;
+  --bs-font-monospace: "Roboto Mono",SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
   --border-color: #e0e0e0;
   --border-color-dark: #d5d5d5;
   --bg-light: #e8e8e8;
@@ -13,7 +13,7 @@
 }
 html {
   background: #f7f7f7;
-  //background: url(/assets/core/img/page-back.jpg) fixed top / cover no-repeat #f7f7f7;
+  // background: url(/assets/core/img/page-back.jpg) fixed top / cover no-repeat #f7f7f7;
   font: 15px/1.5 var(--bs-font-sans-serif);
   &:focus-within { scroll-behavior: smooth; }
 }
@@ -32,9 +32,9 @@ a {
 a:not([class]), .link-decoration {
   text-decoration: 1px dotted underline #17e;
 }
-a:not([class]):hover {
-  color: #444;
-  text-decoration: 1px underline #888;
+a:not([class]):hover, .link-decoration:hover {
+  color: #004;
+  text-decoration: none;
 }
 img, picture {
   display: block;
@@ -87,13 +87,12 @@ input {
 // Main
 .page-main-footer {
   &.position-fixed {
-    _z-index: 1;
     bottom: 0;
     gap: 1rem;
     width: 100%;
     padding: 1rem;
     border-top: 1px solid var(--border-color-dark);
-    background: rgba(240,240,240,.75);
+    background: rgba(240, 240, 240, .75);
   }
   .pagination { margin: 0; }
 }
@@ -108,13 +107,13 @@ input {
   }
 }
 .page-article {
-  //box-shadow: 1px 1px 2px rgba(0,0,0,.1);
+  // box-shadow: 1px 1px 2px rgba(0,0,0,.1);
   .page-article-header, .page-article-body {
     padding: min(1.5rem, 2.5vw);
   }
   .page-article-header {
     border-bottom: 1px solid var(--border-color);
-    background: url('/assets/core/img/neko_oyako.png') right 0 top 0 / contain no-repeat;
+    background: url("/assets/core/img/neko_oyako.png") right 0 top 0 / contain no-repeat;
   }
   .page-article-title {
     margin: 0;

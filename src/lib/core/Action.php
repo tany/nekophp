@@ -53,27 +53,20 @@ class Action {
     return $this->response;
   }
 
-  public function done($url, $status, $title = null, $message = null) {
-    $response = $this->response->json([
-      'type'     => 'notice',
-      'status'   => $status,
-      'location' => $url,
-      'title'    => $title,
-      'message'  => $message
-    ]);
-    return match ($status) {
-      201, 202 => $response->status($status)->header("Location: {$url}"),
+  public function done($params = []) {
+    $params += ['result' => 'done', 'status' => 200];
+    $response = $this->response->json($params);
+
+    return match ($params['status']) {
+      201, 202 => $response->status($params['status']),
       default => $response->status(200)
     };
   }
 
-  public function fail($status, $title = null, $message = null) {
-    $response = $this->response->json([
-      'type'    => 'error',
-      'status'  => $status,
-      'title'   => $title,
-      'message' => $message
-    ]);
-    return $response->status($status);
+  public function fail($params = []) {
+    $params += ['result' => 'fail', 'status' => 400];
+    $response = $this->response->json($params);
+
+    return $response->status($params['status']);
   }
 }

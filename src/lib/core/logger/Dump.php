@@ -1,6 +1,7 @@
 <?php
 namespace core\logger;
 
+use \core\logger\Log;
 use \core\storage\Cache;
 
 class Dump {
@@ -10,57 +11,20 @@ class Dump {
   protected static $tmp;
 
   public static function shutdown() {
-    if (defined('MODE') && MODE === 'production') return self::log();
-    if (!ob_get_level()) return self::log();
+    if (defined('MODE') && MODE === 'production') return;
+    if (!ob_get_level()) return;
 
     $header = join("\n", headers_list());
-    if (stripos($header, 'Content-Type:') !== false) return self::log();
+    if (stripos($header, 'Content-Type:') !== false) return;
 
     if (PHP_SAPI === 'cli') return self::renderCli();
     if (ACCEPT === 'text/html') return self::renderHtml();
-
-    return self::log();
   }
 
   public static function store(...$values) {
     foreach ($values as $value) {
-      self::$tmp = '';
-      self::export($value);
-      self::$logs[] = rtrim(self::$tmp);
-    }
-  }
-
-  protected static function export($data, $depth = 0, $join = false) {
-    $indent = str_repeat('  ', $depth + 1);
-    if (!$join) self::$tmp .= str_repeat('  ', $depth);
-
-    if (is_null($data)) {
-      self::$tmp .= '<null>' . "\n";
-    } elseif (is_bool($data)) {
-      self::$tmp .= var_export($data, true) . ' <bool>' . "\n";
-    } elseif (is_scalar($data)) {
-      self::$tmp .= print_r($data, true) . ' <' . gettype($data) . '>' . "\n";
-    } elseif (is_array($data)) {
-      self::$tmp .= '<array>' . "\n";
-      foreach ($data as $key => $val) {
-        self::$tmp .= "{$indent}[{$key}] => ";
-        self::export($val, $depth + 1, true);
-      }
-    } elseif (is_object($data)) {
-      $id = spl_object_id($data);
-      self::$tmp .= '<' . get_class($data) . "> #{$id}\n";
-
-      if (isset(self::$ids[$id])) return;
-      self::$ids[$id] = true;
-
-      $object = new \ReflectionClass($data);
-      foreach ($object->getProperties() as $key => $prop) {
-        self::$tmp .= "{$indent}[{$prop->name}] => ";
-        $prop->setAccessible(true);
-        self::export($prop->getValue($data), $depth + 1, true);
-      }
-    } else {
-      self::$tmp .= get_type($data) . "\n";
+      $data = Log::log($value, 'DEBUG');
+      self::$logs[] = $data;
     }
   }
 
@@ -68,13 +32,6 @@ class Dump {
     $time = number_sigfig((microtime(true) - TIME_FLOAT) * 1000);
     $label = Cache::$keep ? ' / Cache' :'';
     return "{$time} ms{$label}";
-  }
-
-  protected static function log() {
-    if (!self::$logs) return;
-    foreach (self::$logs as $str) {
-      log_debug($str);
-    }
   }
 
   protected static function renderCli() {

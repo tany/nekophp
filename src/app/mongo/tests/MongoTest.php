@@ -9,7 +9,7 @@ return new class extends \core\Test {
 
   public function __invoke() {
     // before
-    $this->database .=  time();
+    $this->database .= time();
 
     // Login
     $this->visit('/login');
@@ -49,8 +49,8 @@ return new class extends \core\Test {
     $this->click('.data-table thead .td-icon .js-next-link');
 
     // Database
-    $this->visit('/mongo/db/');
-    $tr = ".data-table tbody tr[data-href='{$this->database}/']";
+    $tr = ".data-table tbody tr[data-id='{$this->database}']";
+    $this->visit('/mongo/default/');
     $this->click("{$tr} .td-icon:last-child", false);
     $this->click("{$tr} .td-icon:last-child .js-rest-delete");
     $this->click('.modal-footer .btn:last-child');

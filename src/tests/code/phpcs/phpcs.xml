@@ -15,7 +15,6 @@
   <exclude-pattern>app/*/views</exclude-pattern>
   <exclude-pattern>tmp/</exclude-pattern>
   <exclude-pattern>vendor/</exclude-pattern>
-  <exclude-pattern>zzz_bak/</exclude-pattern>
 
   <!-- Line indented incorrectly -->
   <rule ref="Generic.WhiteSpace.ScopeIndent">

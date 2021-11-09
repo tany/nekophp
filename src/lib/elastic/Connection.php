@@ -31,12 +31,14 @@ final class Connection {
 
   // Index
 
-  public function indices() {
+  public function catIndices() {
     foreach ($this->client->cat()->indices(['s' => 'index', 'pri' => true]) as $data) {
       $array[] = (object) [
         'name' => $data['index'],
+        'health' => ucfirst($data['health']),
+        'status' => ucfirst($data['status']),
         'docs' => $data['docs.count'],
-        'size' => preg_replace('/kb/', ' KB', $data['pri.store.size']),
+        'size' => strtoupper(preg_replace('/([0-9])([a-z])/', '$1 $2', $data['pri.store.size'])),
       ];
     }
     return $array ?? [];

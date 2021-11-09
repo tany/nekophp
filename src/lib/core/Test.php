@@ -67,7 +67,7 @@ class Test extends TestCase {
 
   public function visit($path) {
     $url = $path[0] === '/' ? self::$baseUrl . $path : $path;
-    print " -> {$url}\n";
+    print ' -> ' . str_shift($url, self::$baseUrl) . "\n";
 
     self::$driver->get($url);
     self::$driver->wait(2, 300)->until(function ($driver) use ($url) {
@@ -83,7 +83,7 @@ class Test extends TestCase {
     try {
       return self::$driver->findElement(WebDriverBy::cssSelector($selector));
     } catch (NoSuchElementException $e) {
-      print self::$driver->getPageSource() . "\n";
+      //print self::$driver->getPageSource() . "\n";
       throw $e;
     }
   }
@@ -109,17 +109,18 @@ class Test extends TestCase {
    */
   public function click($selector, $wait = true) {
     $lastUrl = self::$driver->getCurrentURL();
-    $lastCnt = count(self::$driver->findElements(WebDriverBy::cssSelector('*')));
+    $lastCnt = self::$driver->executeScript('return document.all.length');
     //$lastCnt = self::$driver->executeScript('return $(":visible").length');
+    //$lastCnt = count(self::$driver->findElements(WebDriverBy::cssSelector('*')));
 
     $this->find($selector)->click();
 
     if ($wait === true) {
       self::$driver->wait(2, 300)->until(function ($driver) use ($lastCnt) {
-        return $lastCnt !== count($driver->findElements(WebDriverBy::cssSelector('*')));
+        return $lastCnt !== $driver->executeScript('return document.all.length');
       });
       if (($url = self::$driver->getCurrentURL()) !== $lastUrl) {
-        print " -> {$url}\n";
+        print ' -> ' . str_shift($url, self::$baseUrl) . "\n";
       }
     }
   }

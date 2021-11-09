@@ -1,86 +1,104 @@
-'use strict'
+import ClassList from './javascripts/ClassList';
+import Clipboard from './javascripts/Clipboard';
+import Form from './javascripts/Form';
+import Link from './javascripts/Link';
+import Loading from './javascripts/Loading';
+import Modal from './javascripts/Modal';
+import Response from './javascripts/Response';
+import RESTish from './javascripts/RESTish';
+import Utils from './javascripts/Utils';
 
-global.Core = require('./javascripts/Core.js')
+window.core = {
+  ClassList,
+  Clipboard,
+  Form,
+  Link,
+  Loading,
+  Modal,
+  RESTish,
+  Response,
+  Utils,
+};
 
-// Bootstrap - Tooltips
-document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) {
-  return new bootstrap.Tooltip(el)
-})
+// Bootstrap - tooltip
+[...document.querySelectorAll('[data-bs-toggle="tooltip"]')].forEach(el => {
+  new bootstrap.Tooltip(el);
+});
+
+// TODO: Bootstrp - dropdown
+document.querySelectorAll('.dropdown-switch').forEach(el => {
+  el.addEventListener('click', ev => {
+    el.closest('ul').querySelectorAll('li').forEach(li => {
+      li.classList.toggle('d-none');
+    });
+    ev.preventDefault();
+    ev.stopPropagation();
+  });
+});
 
 // Disable enter key submittion
-$('form[type="POST"]').on('keypress', function(ev) {
-  if (ev.key === 'Enter') ev.preventDefault()
-})
+document.querySelectorAll('form[type="POST"]').forEach(el => {
+  el.addEventListener('keypress', ev => {
+    if (ev.key === 'Enter') ev.preventDefault();
+  });
+});
 
 // Link inherits the Parameters
-$('.js-next-link').each(function() {
-  if (this.hasAttribute('href')) this.setAttribute('href', Core.nextUrl(this.getAttribute('href')))
-  else if (this.hasAttribute('data-href')) this.dataset.href = Core.nextUrl(this.dataset.href)
-})
+document.querySelectorAll('.js-next-link, [data-next-href]').forEach(el => {
+  core.Link.setNextLink(el);
+});
 
-// Nav - activate
-$('.nav-link').each(function() {
-  let href = this.getAttribute('href')
-  let check = (href === '/') ? location.pathname === '/' : location.pathname.indexOf(href) === 0
-  this.classList.toggle('active', check)
-})
+// Ajax link
+document.querySelectorAll('.js-ajax-link').forEach(el => {
+  core.Link.setAjaxLink(el);
+});
 
-// Row - link
-$('.row-link').each(function() {
-  let href = this.dataset.href || this.querySelector('a:first-child')?.getAttribute('href')
-  if (!href) return
-  $(this).css('cursor', 'pointer').on('click', function(ev) {
-    if (ev.target.tagName === 'A' || ev.target.closest('a,.row-link-disabled')) return
-    if (window.getSelection().isCollapsed) window.location = href
-  })
-})
+// Row link
+document.querySelectorAll('.js-row-link').forEach(el => {
+  core.Link.setRowLink(el);
+});
+
+// Nav link
+document.querySelectorAll('.js-nav-link').forEach(el => {
+  core.Link.setNavLink(el);
+});
 
 // List - select
-$('.js-list-select').each(function() {
-  Core.restish.setListSelect($(this))
-})
+document.querySelectorAll('.js-list-select').forEach(el => {
+  core.RESTish.setListSelect(el);
+});
 
 // List - deselect
-$('.js-list-deselect').each(function() {
-  Core.restish.setListDeselect($(this))
-})
+document.querySelectorAll('.js-list-deselect').forEach(el => {
+  core.RESTish.setListDeselect(el);
+});
 
 // List - delete
-$('.js-list-delete').each(function() {
-  Core.restish.setListDelete($(this))
-})
+document.querySelectorAll('.js-list-delete').forEach(el => {
+  core.RESTish.setListDelete(el);
+});
 
 // REST - create
-$('.js-rest-create').each(function() {
-  Core.restish.setCreate($(this))
-})
+document.querySelectorAll('.js-rest-create').forEach(el => {
+  core.RESTish.setCreate(el);
+});
 
 // REST - update
-$('.js-rest-update').each(function() {
-  Core.restish.setUpdate($(this))
-})
+document.querySelectorAll('.js-rest-update').forEach(el => {
+  core.RESTish.setUpdate(el);
+});
 
 // REST - delete
-$('.js-rest-delete').each(function() {
-  Core.restish.setDelete($(this))
-})
+document.querySelectorAll('.js-rest-delete').forEach(el => {
+  core.RESTish.setDelete(el);
+});
 
 // Form
-$('.js-form-submit').each(function() {
-  Core.restish.setAjaxSubmit($(this))
-})
+document.querySelectorAll('.js-form-submit').forEach(el => {
+  core.Form.setAjaxSubmit(el);
+});
 
 // Clipboard - copy
-$('.js-clipboard-copy').each(function() {
-  Core.clipboard.setCopy($(this))
-})
-
-// $('.js-clipboard-copy').on('click', function(ev) {
-//   let el = ev.currentTarget
-//   let icon = $(el.querySelector('.bi'))
-
-//   Core.clipboard.copy(el.nextElementSibling)
-//   icon.toggleClass('bi-clipboard bi-check2')
-//   setTimeout(() => icon.toggleClass('bi-clipboard bi-check2'), 1000)
-//   ev.preventDefault()
-// })
+document.querySelectorAll('.js-clipboard-copy').forEach(el => {
+  core.Clipboard.setCopy(el);
+});

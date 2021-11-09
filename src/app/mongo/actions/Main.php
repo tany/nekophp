@@ -15,13 +15,7 @@ class Main extends \core\Action {
     if (!$request->isPost()) return;
 
     $name = $request->data['name'];
-    $conf = $this->clients[$name];
 
-    if (!$this->connect($name, $conf)) {
-      return $this->fail(500, 'Connection Error', $this->error);
-    }
-
-    $this->storeConnection($name);
-    $this->done('/mongo/db/', 200);
+    $this->done(['location' => "/mongo/{$name}/"]);
   }
 }

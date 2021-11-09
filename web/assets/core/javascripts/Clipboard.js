@@ -1,34 +1,32 @@
-'use strict'
-
-module.exports = class Clipboard {
+export default class Clipboard {
 
   static setCopy(el) {
-    let icon = el.find('.bi')
+    const icon = el.querySelector('.bi');
 
-    el.on('click', function(ev) {
-      Clipboard.copy(el.next())
+    el.addEventListener('click', ev => {
+      ev.preventDefault();
+      Clipboard.copy(el.nextElementSibling);
 
-      icon.toggleClass('bi-clipboard bi-check2')
-      setTimeout(() => icon.toggleClass('bi-clipboard bi-check2'), 1000)
-      ev.preventDefault()
-    })
+      core.ClassList.toggle(icon, 'bi-clipboard bi-check2');
+      setTimeout(() => core.ClassList.toggle(icon, 'bi-clipboard bi-check2'), 1000);
+    });
   }
 
   static copy(el) {
-    if (location.protocol === 'https:') {
-      navigator.clipboard.writeText(el.text()) // el.textContent
+    if (window.location.protocol === 'https:') {
+      navigator.clipboard.writeText(el.textContent);
     } else {
-      Clipboard.deprecatedCopy(el)
+      Clipboard.deprecatedCopy(el);
     }
   }
 
   static deprecatedCopy(el) {
-    let selection = document.getSelection()
-    let range = new Range();
-    range.selectNodeContents(el[0])
-    selection.removeAllRanges()
-    selection.addRange(range)
-    document.execCommand('copy')
-    selection.removeAllRanges()
+    const selection = document.getSelection();
+    const range = new Range();
+    range.selectNodeContents(el);
+    selection.removeAllRanges();
+    selection.addRange(range);
+    document.execCommand('copy');
+    selection.removeAllRanges();
   }
 }

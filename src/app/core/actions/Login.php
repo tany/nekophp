@@ -14,6 +14,7 @@ class Login extends \core\Action {
   }
 
   public function index($request) {
+    $this->redirect = 1;
     if ($request->isPost()) return $this->login($request);
   }
 
@@ -25,19 +26,19 @@ class Login extends \core\Action {
     Core::$user = $user ? AuthToken::login($user) : null;
 
     if (!Core::$user) {
-      return $this->fail(401, lc('core.alert.login.fail'));
+      return $this->fail(['status' => 401, 'title' => lc('core.alert.login.fail')]);
     }
 
-    $path = $data['path'] ?? '/';
-    if ($path[0] !== '/' || $path === '/login') $path = '/';
-
-    $this->done($path, 200, lc('core.alert.login.done'));
+    if (empty($data['redirect'])) {
+      $this->done(['reflesh' => true, 'alert' => lc('core.alert.login.done')]);
+    } else {
+      $this->done(['location' => '/', 'alert' => lc('core.alert.login.done')]);
+    }
   }
 
   public function logout($request) {
     AuthToken::logout();
 
-    //$this->done('/login', 200, lc('core.alert.logout.done'));
-    $this->alert(lc('core.alert.logout.done'))->location('/login', 200);
+    $this->done(['location' => '/login', 'alert' => lc('core.alert.logout.done')]);
   }
 }

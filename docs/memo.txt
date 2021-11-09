@@ -9,5 +9,7 @@ Git
 - composer install --no-dev
 - git ls-files | wc -l
 --------------------------------------------------------------------------------
-npm
-- npm run stylelint
+ncu
+- npm install -g npm-check-updates
+- ncu --target minor
+- ncu --target patch

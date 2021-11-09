@@ -1,12 +1,9 @@
 <script>
-  window.onload = function() {
-    $('textarea').on('click', function() {
-      $('.dropdown-menu').removeClass('show')
-    })
-
-    var q = $('#db-query').val()
-    if (q) $('#db-query').focus()[0].setSelectionRange(q.length, q.length)
-  }
+  document.addEventListener('DOMContentLoaded', () => {
+    if (!document.querySelector('#main form')) {
+      core.Form.focusField('#db-query')
+    }
+  })
 </script>
 
 <nav class="core-db-navi position-fixed d-flex">
@@ -16,8 +13,6 @@
       {$this->conn->name}</span>
     <ul class="dropdown-menu">
       <li><a class="dropdown-item" href="/elastic">Disconnect</a></li>
-      <li><hr class="dropdown-divider"></li>
-      <li><a class="dropdown-item" href="/">Home</a></li>
     </ul>
   </div>
 
@@ -26,11 +21,11 @@
       role="button" data-bs-toggle="dropdown" aria-expanded="false">
       {$request->index ?? 'Select Index'}</span>
     <ul class="dropdown-menu">
-      <li><a class="dropdown-item" href="/elastic/index/">Select Index</a></li>
+      <li><a class="dropdown-item" href="/elastic/{$request->client}/">Select Index</a></li>
       <li><hr class="dropdown-divider"></li>
-      @foreach $this->conn->indices() as $item
-        <?php $class = ($item->name === $request->index) ? 'active'  : ''; ?>
-        <li><a class="dropdown-item {$class}" href="/elastic/index/{$item->name}/">{$item->name}</a></li>
+      @foreach $this->conn->catIndices() as $item
+        <?php $class = ($item->name === $request->index) ? 'active' : ''; ?>
+        <li><a class="dropdown-item {$class}" href="/elastic/{$request->client}/{$item->name}/">{$item->name}</a></li>
       @end
     </ul>
   </div>

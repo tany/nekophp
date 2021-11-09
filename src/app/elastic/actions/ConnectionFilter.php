@@ -12,10 +12,11 @@ trait ConnectionFilter {
     $required = $this->connectionRequired ?? true;
     if (!$required) return;
 
-    $name = Session::get('elastic.client');
-    if (!$name) return $this->disconnect();
+    $name = $request->client;
+    $conf = setting('elastic.clients')[$name] ?? null;
 
-    $this->conn = $this->connect($name, setting('elastic.clients')[$name]);
+    if (!$conf) return $this->disconnect();
+    $this->conn = $this->connect($name, $conf);
     if (!$this->conn) return $this->disconnect();
   }
 
@@ -24,18 +25,18 @@ trait ConnectionFilter {
       $conn = Connection::connect($name, $conf);
       $conn->client->ping();
     } catch (\Throwable $e) {
-      $this->error = $e->getMessage();
+      $this->alert('Error: ' . $e->getMessage(), 'danger');
       return false;
     }
     return $conn;
   }
 
   protected function storeConnection($name) {
-    Session::set('elastic.client', $name);
+    //Session::set('elastic.client', $name);
   }
 
   protected function disconnect() {
-    Session::delete('elastic.client');
+    //Session::delete('elastic.client');
     $this->response->location('/elastic');
   }
 }

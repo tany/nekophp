@@ -7,7 +7,7 @@ class Session {
 
   protected static $started;
 
-  public static $expires = 1_800;
+  public static $expires = 3_600;
   public static $name;
 
   public static function initialize($name) {

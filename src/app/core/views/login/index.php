@@ -3,9 +3,8 @@
     <h1 class="page-article-title">Sign in</h1>
   </header>
   <div class="page-article-body">
-
     <form class="form-main p-4 border bg-light" method="post" action="/login" style="max-width: 30rem;">
-      <input type="hidden" name="data[path]" value="{$request->path()}">
+      <input type="hidden" name="data[redirect]" value="{$this->redirect}">
       <div>
         <label for="data-username" class="form-label">Username</label>
         <input type="text" class="form-control" id="data-username" name="data[username]">

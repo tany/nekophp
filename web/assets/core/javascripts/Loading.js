@@ -1,18 +1,16 @@
-'use strict'
+export default class Loading {
 
-module.exports = class Loading {
+  static id = 'core-loading';
 
-  static id = 'core-loading'
-
-  static wait() {
+  static start() {
     $('body').append(`
       <div class="d-flex-center ${Loading.id}">
       <div class="spinner-border text-secondary" role="status">
       <span class="visually-hidden">Loading...</span></div></div>
-    `)
+    `);
   }
 
   static stop() {
-    $(`.${Loading.id}`).remove()
+    $(`.${Loading.id}`).remove();
   }
 }

@@ -6,7 +6,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(244,244,244,.3);
+  background: rgba(244, 244, 244, .3);
   .spinner-border {
     width: 5rem;
     height: 5rem;
@@ -16,6 +16,7 @@
 // Table
 .data-table {
   width: max-content;
+  height: 100%;
   font-size: var(--font-size-sm);
   > thead {
     border-top: 1px solid var(--border-color-dark);
@@ -35,23 +36,26 @@
   > :not(caption) > * > th {
     background: var(--bg-light);
   }
-  .row-link:hover > th {
+  .js-row-link:hover > th {
     background: #ddb;
   }
-  .row-link:hover > td {
+  .js-row-link:hover > td {
     background: #eec;
   }
-  .row-link-disabled {
+  .js-row-unlink {
     cursor: auto;
   }
   .td-icon, .td-check {
     width: 40px;
+    height: 100%;
     padding: 0;
     text-align: center;
     vertical-align: middle;
   }
-  .td-icon .dropdown-menu {
-    top: -.1rem !important;
+  .td-check {
+    padding-bottom: 1px;
+  }
+  .td-icon > .dropdown-menu {
     left: -.2rem !important;
   }
 }
@@ -92,7 +96,7 @@
     &.type-object {
       color: #092;
     }
-    &.type-NULL {
+    &.type-null {
       color: #999;
     }
     .pre-value {

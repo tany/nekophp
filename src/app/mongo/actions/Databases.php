@@ -21,19 +21,19 @@ class Databases extends \core\Action {
   public function createResource($request) {
     $name = $request->data['name'];
 
-    $this->done("{$name}/", 201);
+    $this->done(['status' => 201, 'location' => "{$name}/"]);
   }
 
   public function deleteResource($request) {
     $this->conn->dropDatabase($request->db);
 
-    $this->done('.', 204);
+    $this->done(['status' => 204, 'location' => '.']);
   }
 
   public function deleteResources($request) {
     foreach ($request->id as $id) {
       $this->conn->dropDatabase($id);
     }
-    $this->done('.', 204);
+    $this->done(['status' => 204, 'location' => '.']);
   }
 }
