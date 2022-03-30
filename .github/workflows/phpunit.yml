@@ -19,11 +19,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: ChromeDriver ... Install
+      #- name: ChromeDriver ... Install
+      #  run: |
+      #    VER=`wget -q -O - https://chromedriver.storage.googleapis.com/LATEST_RELEASE`
+      #    wget https://chromedriver.storage.googleapis.com/$VER/chromedriver_linux64.zip
+      #    sudo unzip chromedriver_linux64.zip -d /usr/local/bin/
+
+      - name: Chrome ... Install
         run: |
-          VER=`wget -q -O - https://chromedriver.storage.googleapis.com/LATEST_RELEASE`
-          wget https://chromedriver.storage.googleapis.com/$VER/chromedriver_linux64.zip
-          sudo unzip chromedriver_linux64.zip -d /usr/local/bin/
+          sudo wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+          sudo apt update
+          sudo apt-get install google-chrome-stable
 
       - name: MongoDB ... Install
         uses: supercharge/mongodb-github-action@1.3.0
@@ -79,7 +85,10 @@ jobs:
       - name: Other Settings
         run: |
           cp conf/examples/settings.php conf/
+          touch log/application.log
           chmod -R 777 log tmp
 
       - name: Test!
-        run: bin/test
+        run: |
+          bin/lint
+          bin/ci

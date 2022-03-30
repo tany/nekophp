@@ -17,9 +17,27 @@ export default class Link {
     if (el.hasAttribute('href')) {
       el.setAttribute('href', Link.nextUrl(el.getAttribute('href')));
     }
-    if (el.hasAttribute('data-next-href')) {
-      el.dataset.href = Link.nextUrl(el.dataset.nextHref);
+    if (el.hasAttribute('data-href')) {
+      el.dataset.href = Link.nextUrl(el.dataset.href);
     }
+  }
+
+  static setNavLink(el) {
+    const href = el.getAttribute('href');
+    const path = window.location.pathname;
+    const active = (href === '/') ? path === '/' : path.indexOf(href) === 0;
+
+    el.classList.toggle('active', active);
+  }
+
+  static setRowLink(el) {
+    el.style.cursor = 'pointer';
+    el.addEventListener('click', ev => {
+      const href = el.dataset.href ?? el.querySelector('a[href]')?.getAttribute('href');
+      if (!href) return;
+      if (ev.target.tagName === 'A' || ev.target.closest('a,.unlink')) return;
+      if (window.getSelection().isCollapsed) window.location = href;
+    });
   }
 
   static setAjaxLink(el) {
@@ -32,23 +50,5 @@ export default class Link {
         .catch(core.Response.fail);
       ev.preventDefault();
     });
-  }
-
-  static setRowLink(el) {
-    el.style.cursor = 'pointer';
-    el.addEventListener('click', ev => {
-      const href = el.dataset.href ?? el.querySelector('a')?.getAttribute('href');
-      if (!href) return;
-      if (ev.target.tagName === 'A' || ev.target.closest('a,.js-row-unlink')) return;
-      if (window.getSelection().isCollapsed) window.location = href;
-    });
-  }
-
-  static setNavLink(el) {
-    const href = el.getAttribute('href');
-    const path = window.location.pathname;
-    const active = (href === '/') ? path === '/' : path.indexOf(href) === 0;
-
-    el.classList.toggle('active', active);
   }
 }

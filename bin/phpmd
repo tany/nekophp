@@ -1,7 +1,0 @@
-#!/bin/sh
-
-PHP_INI="./bin/php-cli.ini"
-
-cd $(dirname $(cd $(dirname $0); pwd))
-
-/usr/bin/env php -c $PHP_INI -f src/tests/code/phpmd/phpmd.php

@@ -3,6 +3,7 @@
         "elasticsearch/elasticsearch": "^7.14"
     },
     "require-dev": {
+        "chrome-php/chrome": "^1.4",
         "php-webdriver/webdriver": "^1.11",
         "phpcompatibility/php-compatibility": "*",
         "phpmd/phpmd": "^2.10",

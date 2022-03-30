@@ -1,19 +1,22 @@
 // Bundle
 @import "stylesheets/bootstrap";
 @import "stylesheets/core";
+@import "stylesheets/table";
 
 // Standard
 :root {
   --bs-font-monospace: "Roboto Mono",SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
-  --border-color: #e0e0e0;
-  --border-color-dark: #d5d5d5;
-  --bg-light: #e8e8e8;
+  --border-gray1-color: #e5e5e5;
+  --border-gray2-color: #d5d5d5;
+  --back-white-color: #fff;
+  --back-gray1-color: #fafafa;
+  --back-gray2-color: #eaeaea;
+  --link-text-color: #06e;
   --font-size-sm: 13px;
   --font-size-md: 15px;
 }
 html {
   background: #f7f7f7;
-  // background: url(/assets/core/img/page-back.jpg) fixed top / cover no-repeat #f7f7f7;
   font: 15px/1.5 var(--bs-font-sans-serif);
   &:focus-within { scroll-behavior: smooth; }
 }
@@ -21,20 +24,20 @@ body {
   min-height: 100%;
   background-color: transparent;
   font: inherit;
-  text-underline-offset: .05rem;
+  text-underline-offset: -.15rem;
   text-underline-position: under;
   text-rendering: optimizeSpeed;
 }
 a {
-  color: #06f;
+  color: var(--link-text-color);
   text-decoration: none;
 }
-a:not([class]), .link-decoration {
-  text-decoration: 1px dotted underline #17e;
+a:not([class]):hover, .link:hover {
+  color: var(--link-text-color);
+  text-decoration: 1px solid underline currentColor;
 }
-a:not([class]):hover, .link-decoration:hover {
-  color: #004;
-  text-decoration: none;
+.unlink {
+  cursor: auto;
 }
 img, picture {
   display: block;
@@ -58,15 +61,14 @@ input {
   height: 50px;
   padding: 0 2vw;
   overflow-x: auto;
-  border-bottom: 1px solid var(--border-color-dark);
-  background: var(--bg-light);
-  .nav-link:hover:not(.active) {
-    color: #70d !important;
-    text-decoration: underline 1px #95e;
-  }
+  border-bottom: 1px solid var(--border-gray2-color);
+  background: var(--back-gray2-color);
   .nav-link.active {
+    color: #70d !important;
+  }
+  .nav-link:hover:not(.active) {
     color: #000;
-    text-decoration: underline 1px #666;
+    text-decoration: underline;
   }
 }
 .page-body {
@@ -81,17 +83,18 @@ input {
   max-width: 1140px;
   min-height: 8rem;
   margin: 50px auto 0;
-  border-top: 1px solid var(--border-color-dark);
+  border-top: 1px solid var(--border-gray2-color);
 }
 
 // Main
 .page-main-footer {
   &.position-fixed {
+    z-index: 1;
     bottom: 0;
     gap: 1rem;
     width: 100%;
-    padding: 1rem;
-    border-top: 1px solid var(--border-color-dark);
+    height: 70px;
+    border-top: 1px solid var(--border-gray2-color);
     background: rgba(240, 240, 240, .75);
   }
   .pagination { margin: 0; }
@@ -100,8 +103,8 @@ input {
 // Article, Section
 .page-article, .page-section {
   margin-bottom: 1rem;
-  border: 1px solid var(--border-color);
-  background: #fff;
+  border: 1px solid var(--border-gray1-color);
+  background: var(--back-white-color);
   &:last-child() {
     margin-bottom: 0;
   }
@@ -112,7 +115,7 @@ input {
     padding: min(1.5rem, 2.5vw);
   }
   .page-article-header {
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-gray1-color);
     background: url("/assets/core/img/neko_oyako.png") right 0 top 0 / contain no-repeat;
   }
   .page-article-title {
@@ -125,7 +128,7 @@ input {
     padding: min(1rem, 2.5vw) min(1.5rem, 2.5vw);
   }
   .page-section-header {
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-gray1-color);
   }
   .page-section-title {
     margin: 0;
@@ -141,8 +144,8 @@ input {
   width: 100%;
   height: 50px;
   padding: 0 1rem;
-  border-bottom: 1px solid var(--border-color-dark);
-  background: var(--bg-light);
+  // border-bottom: 1px solid var(--border-gray2-color);
+  background: var(--back-gray2-color);
   .dropdown-menu {
     font-size: var(--font-size-sm);
   }

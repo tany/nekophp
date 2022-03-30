@@ -1,0 +1,14 @@
+#!/bin/sh
+
+PHP_INI="./bin/php-cli.ini"
+
+cd $(dirname $(cd $(dirname $0); pwd))
+
+name=${1:-}
+
+if [ -n "$name" ]; then
+  /usr/bin/env php -c $PHP_INI -f src/lib/$name/$name.php
+else
+  /usr/bin/env php -c $PHP_INI -f src/lib/phpcs/phpcs.php
+  /usr/bin/env php -c $PHP_INI -f src/lib/phpmd/phpmd.php
+fi

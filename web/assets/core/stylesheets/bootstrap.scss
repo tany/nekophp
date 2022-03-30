@@ -1,4 +1,4 @@
-// Bootstrap
+/* Bootstrap */
 
 // Icons
 .bi { line-height: 1; }
@@ -33,6 +33,14 @@
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
+}
+
+// Form
+.form-check-input {
+  border: 2px solid rgba(0, 0, 0, .3);
+}
+.form-check-input:hover:not(:checked) {
+  border-color: rgba(0, 0, 0, .5);
 }
 
 // Link

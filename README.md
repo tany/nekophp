@@ -63,13 +63,14 @@ wget https://chromedriver.storage.googleapis.com/$VER/chromedriver_linux64.zip
 sudo unzip chromedriver_linux64.zip -d /usr/local/bin/
 rm chromedriver_linux64.zip
 
-bin/test   # PHPUnit
-bin/phpcs  # PHP Code Sniffer
-bin/phpmd  # PHP Mess Detector
+bin/ci          # PHPUnit
+bin/lint phpcs  # PHP Code Sniffer
+bin/lint phpmd  # PHP Mess Detector
 ```
 
 ## Release Notes
 
+- 0.0.4 Some fixes
 - 0.0.3 Elasticsearch stats
 - 0.0.2 Elasticsearch index
 - 0.0.1 MongoDB

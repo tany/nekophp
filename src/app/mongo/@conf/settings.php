@@ -23,8 +23,8 @@ return [
 
   // Overviews
   'mongo.overview.table' => [
-    'page-root' => 'core/overviews/default/page-root',
-    'page-navi' => 'mongo/overviews/table/page-navi',
-    'page-body' => 'core/overviews/table/page-body',
+    'page-root' => 'core/@overviews/default/page-root',
+    'page-navi' => 'mongo/@overviews/table/page-navi',
+    'page-body' => 'core/@overviews/table/page-body',
   ],
 ];

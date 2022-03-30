@@ -1,0 +1,117 @@
+/* Table */
+
+// Data table
+.data-table {
+  width: max-content;
+  height: 100%;
+  font-size: var(--font-size-sm);
+  > :not(caption) > * > * {
+    padding: .4rem .5rem;
+    font-weight: 400;
+    vertical-align: top;
+  }
+  > :not(caption) > * > th {
+    border: 1px solid var(--border-gray2-color);
+    background: var(--back-gray2-color);
+  }
+  > :not(caption) > * > td {
+    border: 1px solid var(--border-gray1-color);
+    background: var(--back-white-color);
+  }
+  > :not(caption) > :last-child > * {
+    border-bottom-color: var(--border-gray2-color);
+  }
+  > :not(caption) > * > :last-child {
+    border-right-color: var(--border-gray2-color);
+  }
+  > :not(caption) > .js-link-row:hover > th {
+    background: #e1e1e1;
+  }
+  > :not(caption) > .js-link-row:hover > td {
+    background: #fbfbfb;
+  }
+  .th-icon, .td-icon {
+    width: 34px;
+    height: 100%;
+    padding: 0;
+    text-align: center;
+    vertical-align: middle;
+    .link-expand {
+      cursor: pointer;
+    }
+    .form-check-input {
+      margin-top: .05rem;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+  }
+}
+
+// Table - sticky
+.data-table.table-sticky {
+  border-spacing: 0;
+  border-collapse: separate;
+  > :not(caption) > * > * {
+    border-width: 0 1px 1px 0;
+  }
+  > :not(caption) > * > .sticky-start {
+    position: -webkit-sticky;
+    position: sticky;
+    left: 0;
+  }
+  > :not(caption):first-child > * > * {
+    border-top-width: 1px;
+  }
+  > :not(caption) > * > .sticky-start:first-child {
+    border-left-width: 1px;
+  }
+  > :not(caption) > * > .sticky-start:nth-child(2) {
+    left: 34px;
+  }
+  > thead > * > th {
+    position: -webkit-sticky;
+    position: sticky;
+    z-index: 1000;
+    top: 50px;
+  }
+  > thead > * > .sticky-start {
+    z-index: 1001;
+  }
+}
+
+// Table - db
+.data-table.table-db {
+  > tbody > * > td {
+    &.type-integer, &.type-double, &.type-float {
+      color: #05e;
+      text-align: right;
+    }
+    &.type-boolean {
+      color: #05e;
+    }
+    &.type-array {
+      color: #b44;
+    }
+    &.type-object {
+      color: #092;
+    }
+    &.type-null {
+      color: #999;
+    }
+    .js-clipboard-copy {
+      margin-left: .5rem;
+    }
+    .pre-value {
+      max-height: 12rem;
+      margin: 0;
+      font: inherit;
+      white-space: pre-wrap;
+    }
+    .input-json {
+      width: calc(100vw - 85px);
+      height: calc(100vh - 175px);
+      padding: .5rem;
+      line-height: 1.2;
+    }
+  }
+}

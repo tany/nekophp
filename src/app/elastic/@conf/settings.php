@@ -16,8 +16,8 @@ return [
 
   // Overviews
   'elastic.overview.table' => [
-    'page-root' => 'core/overviews/default/page-root',
-    'page-navi' => 'elastic/overviews/table/page-navi',
-    'page-body' => 'core/overviews/table/page-body',
+    'page-root' => 'core/@overviews/default/page-root',
+    'page-navi' => 'elastic/@overviews/table/page-navi',
+    'page-body' => 'core/@overviews/table/page-body',
   ],
 ];

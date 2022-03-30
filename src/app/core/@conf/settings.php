@@ -3,48 +3,48 @@
 return [
 
   // Application version
-  'core.version' => '0.0.3',
+  '--version' => '0.0.4',
 
   // Environment Mode (development, production)
-  'core.mode' => 'development',
+  '--mode' => 'development',
 
   // Network Host
-  'core.host' => '',
+  '--host' => '',
 
   // Accept Languages
-  'core.lang' => 'ja',
+  '--lang' => 'ja',
 
   // Multilingual Localization
-  'core.multilingual' => [],
+  '--multilingual' => [],
 
   // Crypt Parameters (phrase: 32 digits, iv: 16 digits)
-  'core.crypt.phrase' => 'a95789d0c1895d855180a4ff920b2cb9', // bin2hex(openssl_random_pseudo_bytes(16))
-  'core.crypt.iv' => '8a47b1330602fc1c', // bin2hex(openssl_random_pseudo_bytes(8))
+  '--crypt.phrase' => 'a95789d0c1895d855180a4ff920b2cb9', // bin2hex(openssl_random_pseudo_bytes(16))
+  '--crypt.iv' => '8a47b1330602fc1c', // bin2hex(openssl_random_pseudo_bytes(8))
 
   // Cache Driver
-  'core.cache.driver' => \core\cache\APCu::class,
+  '--cache.driver' => \core\cache\APCu::class,
 
   // Cache Expires (sec)
-  'core.cache.expires' => 1,
+  '--cache.expires' => 1,
 
   // Cache Lock file
-  'core.cache.lock' => TMP . '/cache.lock',
+  '--cache.lock' => TMP . '/cache.lock',
 
   // Cache Directory
-  'core.cache.path' => TMP . '/cache',
+  '--cache.path' => TMP . '/cache',
 
   // Log File
-  'core.log.file' => LOG . '/application.log',
+  '--log.file' => LOG . '/application.log',
 
   // Internal Redirection (X-Accel-Redirect, X-SendFile)
-  'core.action.internalRedirection' => 'X-Accel-Redirect',
+  '--action.internalRedirection' => 'X-Accel-Redirect',
 
   // Overviews
-  'core.overview.default' => [
-    'page-root'   => 'core/overviews/default/page-root',
-    'page-header' => 'core/overviews/default/page-header',
-    'page-navi'   => 'core/overviews/default/page-navi',
-    'page-body'   => 'core/overviews/default/page-body',
-    'page-footer' => 'core/overviews/default/page-footer',
+  '--overview.default' => [
+    'page-root'   => 'core/@overviews/default/page-root',
+    'page-header' => 'core/@overviews/default/page-header',
+    'page-navi'   => 'core/@overviews/default/page-navi',
+    'page-body'   => 'core/@overviews/default/page-body',
+    'page-footer' => 'core/@overviews/default/page-footer',
   ],
 ];

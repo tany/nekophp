@@ -1,10 +1,9 @@
 <?php
 namespace core;
 
-require '../src/lib/core/Loader.php';
+require '../src/app/core/Loader.php';
 
 Loader::initialize(dirname(__DIR__));
-Loader::include(LIB, APP);
-
+Loader::include(APP, LIB);
 Router::initialize();
 Router::process(new Request);

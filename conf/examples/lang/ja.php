@@ -3,5 +3,5 @@
 return [
 
   // Alert
-  'core.alert.login.done' => 'サインインしました。',
+  '--alert.login.done' => 'サインインしました。',
 ];

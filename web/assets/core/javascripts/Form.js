@@ -1,21 +1,26 @@
 export default class Form {
 
-  static disableButton(el) {
-    el.classList.add('disabled');
-    setTimeout(e => e.classList.remove('disabled'), 2000, el);
-  }
-
   // TODO:
   static disableAjaxSubmit(el) {
     el.classList.add('disabled');
     $('.js-rest-create, .js-rest-update').off('click');
   }
 
-  static focusField(selector) {
-    const q = document.querySelector(selector);
-    if (!q?.value?.length) return;
-    q.focus();
-    q.setSelectionRange(q.value.length, q.value.length);
+  static disableEnter(el) {
+    el.addEventListener('keypress', ev => {
+      if (ev.key === 'Enter' && ev.target.tagName !== 'TEXTAREA') ev.preventDefault();
+    });
+  }
+
+  static disableButton(el) {
+    el.classList.add('disabled');
+    setTimeout(e => e.classList.remove('disabled'), 2000, el);
+  }
+
+  static focusField(el) {
+    if (!el || !el.value) return;
+    el.focus();
+    el.setSelectionRange(el.value.length, el.value.length);
   }
 
   static setAjaxSubmit(el) {

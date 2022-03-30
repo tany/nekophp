@@ -1,4 +1,4 @@
-export default class Request {
+export default class Response {
 
   static done(data, status, xhr) {
     console.debug(`[${status}]`, data);
@@ -11,11 +11,11 @@ export default class Request {
     }
 
     if (params.results) {
-      Request.modal(params).then(() => {
-        if (params.location) Request.redirect(params);
+      Response.modal(params).then(() => {
+        if (params.location) Response.redirect(params);
       });
     } else if (params.location) {
-      Request.redirect(params);
+      Response.redirect(params);
     }
   }
 

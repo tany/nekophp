@@ -3,26 +3,26 @@
 return [
 
   // System Name
-  'core.name' => 'Neko',
-  'core.description' => 'Mew',
+  '--application.name' => 'Neko',
+  '--application.description' => 'Mew',
 
   // Confirm
-  'core.confirm.delete' => '本当に削除してよろしいですか？',
+  '--confirm.delete' => '本当に削除してよろしいですか？',
 
   // Alert
-  'core.alert.login.done' => 'サインインしました。',
-  'core.alert.login.fail' => 'サインインに失敗しました。',
-  'core.alert.logout.done' => 'サインアウトしました。',
-  'core.alert.created' => '作成しました。',
-  'core.alert.updated' => '更新しました。',
-  'core.alert.deleted' => '削除しました。',
+  '--alert.login.done' => 'サインインしました。',
+  '--alert.login.fail' => 'サインインに失敗しました。',
+  '--alert.logout.done' => 'サインアウトしました。',
+  '--alert.created' => '作成しました。',
+  '--alert.updated' => '更新しました。',
+  '--alert.deleted' => '削除しました。',
 
   // Error
-  'core.error.blank' => '入力してください。',
-  'core.error.lessThan' => 'must be less than %d',
+  '--error.blank' => '入力してください。',
+  '--error.lessThan' => 'must be less than %d',
 
   // Pager
-  'core.pager.prev' => '前のページ',
-  'core.pager.next' => '次のページ',
-  'core.pager.gap'  => '&hellip;',
+  '--pager.prev' => '前のページ',
+  '--pager.next' => '次のページ',
+  '--pager.gap'  => '&hellip;',
 ];
