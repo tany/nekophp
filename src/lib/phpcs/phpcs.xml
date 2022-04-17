@@ -3,9 +3,9 @@
   <description>My standard.</description>
 
   <!-- include -->
-  <file>../../conf</file>
-  <file>../../src</file>
-  <file>../../web</file>
+  <file>conf</file>
+  <file>src</file>
+  <file>web</file>
 
   <!-- exclude -->
   <exclude-pattern>*.css</exclude-pattern>

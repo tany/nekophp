@@ -7,17 +7,18 @@
       </th>
       <th style="width: 16rem;">Field</th>
       <th class="d-none d-xl-table-cell" style="width: 16rem;">Type</th>
-      <th style="width: 42rem;">Value</th>
+      <th style="width: 44rem;">Value</th>
     </tr>
   </thead>
   <tbody>
     @foreach ['_index', '_type', '_id'] as $name
     <? $data = $this->item->$name; ?>
+    <? $type = strtolower(str_rshift(get_debug_type($data), '\\')); ?>
     <tr>
       <th class="th-icon unlink"></th>
       <td class="text-break fw-bold">{$name}</td>
-      <td class="text-break text-muted d-none d-xl-table-cell">#{gettype($data)}</td>
-      <td class="text-break type-#{gettype($data)} text-start">
+      <td class="text-break text-muted d-none d-xl-table-cell">{$type}</td>
+      <td class="text-break db-value db-type-{$type} text-start">
         <a href="#" class="float-end link-muted js-clipboard-copy">
           <i class="bi bi-md bi-clipboard"><!----></i></a>
         <pre class="pre-value">{$data}</pre>
@@ -25,24 +26,24 @@
     </tr>
     @end
 
-    @foreach $this->fields as $idx => $name
-    <? $values = $this->item->values($name); ?>
+    @foreach $this->fields as $name
+    <? $val = $this->item->dbValue($name); ?>
     <tr>
       <th class="th-icon unlink"></th>
       <td class="text-break">{$name}</td>
-      <td class="text-break text-muted d-none d-xl-table-cell">{$values->type}</td>
-      <td class="text-break type-{$values->type} text-start">
+      <td class="text-break text-muted d-none d-xl-table-cell">{$val->type}</td>
+      <td class="text-break text-start db-value db-type-{$val->type}">
         <a href="#" class="float-end link-muted js-clipboard-copy">
           <i class="bi bi-md bi-clipboard"><!----></i></a>
-        <pre class="pre-value">{$values->full}</pre>
+        <pre class="pre-value">{$val->long}</pre>
       </td>
     </tr>
     @end
   </tbody>
 </table>
 
-<div class="page-main-footer position-fixed d-flex-center">
+<div class="main-footer footer-fixed">
   <a class="btn btn-secondary js-link-next" href="?_update">Edit Document</a>
   <button type="button" class="btn btn-danger js-rest-delete"
-    data-confirm="#{lc('--confirm.delete')}">Delete Document</button>
+    data-confirm="{\lc('--confirm.delete')}">Delete Document</button>
 </div>

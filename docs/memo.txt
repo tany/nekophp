@@ -13,3 +13,6 @@ ncu
 - npm install -g npm-check-updates
 - ncu --target minor
 - ncu --target patch
+--------------------------------------------------------------------------------
+PowerShell
+- Get-Content -Path .\log\development.log -Wait -Tail 10

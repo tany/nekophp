@@ -45,7 +45,7 @@
     </div>
   @end
 
-  @if $request->coll && str_ends_with(get_class($this), 'Documents')
+  @if $request->coll && str_ends_with($this::class, 'Documents')
     <form class="form-search ms-1" method="get" action="./">
       <div class="input-group input-group-sm">
         <input type="text" class="form-control" id="db-query" placeholder="field: value" aria-label="Search"

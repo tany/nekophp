@@ -1,7 +1,12 @@
 <?php
 namespace core;
 
-require APP . '/core/@func/ponyfills.php';
-require APP . '/core/@func/utils.php';
+$core = dirname(__DIR__);
 
-Core::initialize();
+require "{$core}/Loader.php";
+require "{$core}/@func/ponyfills.php";
+require "{$core}/@func/utils.php";
+
+Loader::initialize();
+Loader::include(APP, LIB);
+Router::initialize();

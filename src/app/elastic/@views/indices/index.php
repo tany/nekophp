@@ -26,7 +26,7 @@
   <tbody>
     @foreach $this->items as $idx => $item
     <? $id = $item->name ?>
-    <tr class="js-link-row js-link-next" data-id="{$id}" data-href="#{rawurlencode($id)}/">
+    <tr class="js-link-row js-link-next" data-id="{$id}" data-href="{\rawurlencode($id)}/">
       <th class="th-icon sticky-start unlink">
         <label class="link-expand">
           <input class="form-check-input" type="checkbox" name="id" value="{$id}">
@@ -47,7 +47,7 @@
           <li><a class="dropdown-item link-primary js-link-ajax" href="{$id}?_settings">Settings</a></li>
           <li><hr class="dropdown-divider"></li>
           <li><a class="dropdown-item link-danger js-rest-delete" href="{$id}"
-            data-confirm="#{lc('--confirm.delete')}">Delete</a></li>
+            data-confirm="{\lc('--confirm.delete')}">Delete</a></li>
 
           <li class="d-none"><a class="dropdown-item link-muted dropdown-switch" href="#">Standard menu ...</a></li>
           <li class="d-none"><hr class="dropdown-divider"></li>

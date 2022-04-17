@@ -28,7 +28,7 @@
     </ul>
   </div>
 
-  @if $request->index && str_ends_with(get_class($this), 'Documents')
+  @if $request->index && str_ends_with($this::class, 'Documents')
     <form class="form-search" method="get" action="./">
       <div class="input-group input-group-sm">
         <input type="text" class="form-control" id="db-query" placeholder="field: value" aria-label="Search"

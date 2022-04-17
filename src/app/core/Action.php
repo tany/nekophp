@@ -7,7 +7,7 @@ use \core\view\Engine;
 
 class Action {
 
-  use \core\feature\Accessor;
+  use \core\features\Accessor;
 
   public static $overview = '--overview.default';
 

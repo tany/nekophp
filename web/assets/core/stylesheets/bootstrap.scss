@@ -82,6 +82,9 @@
   border: none;
   .btn { min-width: 5rem; }
 }
+.modal-header + .modal-body, .modal-body + .modal-footer {
+  padding-top: 0;
+}
 .modal-type-error {
   .modal-header { color: #900; }
 }
@@ -107,6 +110,7 @@
 }
 
 // Spacing
+.mt-md { margin-top: 1.25rem !important; }
 .ml-1 { margin-left: .25rem !important; }
 .ml-2 { margin-left: .5rem !important; }
 .ml-3 { margin-left: 1rem !important; }

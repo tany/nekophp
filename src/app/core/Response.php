@@ -3,7 +3,7 @@ namespace core;
 
 use \core\Core;
 use \core\storage\Cache;
-use \core\utils\MediaType;
+use \core\utils\http\MediaType;
 use \core\view\Engine;
 
 class Response {
@@ -87,7 +87,7 @@ class Response {
 
     $scope = $this->scope;
     $path = str_snake(strtr($scope::class, '\\', '/'));
-    $path = substr_replace($path, '/@views', strpos($path, '/'), 7); // strlen('/action')
+    $path = substr_replace($path, '/@views', strpos($path, '/'), 8); // strlen('/action')
 
     $view = new Engine($scope);
     $view->includePath($path)->render($file ?? $scope->action);

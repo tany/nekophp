@@ -11,9 +11,11 @@ class Router {
   public static $routes = [];
 
   public static function initialize() {
-    require APP . '/core/@conf/boot.php';
+    Core::initialize();
+
     foreach (APPS as $mod) {
-      if ($mod !== 'core') file_try_include(APP . "/{$mod}/@conf/boot.php");
+      if ($mod === 'core') continue;
+      file_try_include(APP . "/{$mod}/@conf/boot.php");
     }
     self::$routes = Parser::initialize();
   }

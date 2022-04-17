@@ -1,111 +1,111 @@
 <?php
 namespace benchmark;
 
-require '@Benchmark.php';
+require 'src/app/core/@conf/boot.php';
 
 // @codingStandardsIgnoreFile
-new class {
+new class extends BenchmarkBase {
 
   public static $staticProp;
   public $objectProp;
 
-  public static function staticMethod() {}
+  public static function staticMethod() {
+  }
 
-  public function objectMethod() {}
+  public function objectMethod() {
+  }
 
-  public function __construct() {
-    Benchmark::h1('Basic Syntax', 1_000_000);
+  public function __invoke() {
+    $this->h1('Basic Syntax', 1_000_000);
 
-    Benchmark::h2('if');
-    BenchMark::measure('if,elseif' , function() { if (0); elseif (0); elseif (0); elseif(1) $v = 1; });
-    BenchMark::measure('match' , function() { $v = match (1) { 0 => 0, 0 => 0,  0 => 0, 1 => 1 }; });
-    BenchMark::measure('switch' , function() { switch (1) { case 0: case 0: case 0: case 1: $v = 1; }; });
+    $this->h2('bool');
 
-    Benchmark::h2('bool');
     $null = null;
+    $this->measure('isset($undef)' , fn() => isset($undef));
+    $this->measure('empty($undef)' , fn() => empty($undef));
+    $this->measure('$undef ?? true', fn() => $undef ?? true);
+    $this->measure('$null ?? true' , fn() => $null ?? true);
+    $this->measure('$null ?: true' , fn() => $null ?: true);
 
-    BenchMark::measure('isset($undef)' , function() { isset($undef); });
-    BenchMark::measure('empty($undef)' , function() { empty($undef); });
-    BenchMark::measure('$undef ?? true', function() { $undef ?? true; });
-    BenchMark::measure('$null ?? true' , function() use ($null) { $null ?? true; });
-    BenchMark::measure('$null ?: true' , function() use ($null) { $null ?: true; });
+    $this->h2('string');
 
     $str = str_repeat('*', 100);
+    $this->measure('"{$str}{$str}"', fn() => "{$str}{$str}{$str}{$str}{$str}{$str}");
+    $this->measure('$str . $str'   , fn() => $str . $str . $str . $str . $str . $str);
 
-    Benchmark::h2('string');
-    BenchMark::measure('"{$str}{$str}"', fn() => "{$str}{$str}{$str}{$str}{$str}{$str}");
-    BenchMark::measure('$str . $str'   , fn() => $str . $str . $str . $str . $str . $str);
+    $this->h2('search');
 
     $str = bin2hex(random_bytes(50));
+    $this->measure('strpos()'      , fn() => strpos($str, 'e'));
+    $this->measure('str_contains()', fn() => str_contains($str, 'e'));
+    $this->measure('preg_match()'  , fn() => preg_match('/e/', $str));
 
-    Benchmark::h2('search');
-    BenchMark::measure('strpos()'      , fn() => strpos($str, 'e'));
-    BenchMark::measure('str_contains()', fn() => str_contains($str, 'e'));
-    BenchMark::measure('preg_match()'  , fn() => preg_match('/e/', $str));
+    $this->h2('array');
 
     $arr1 = range(0, 10);
     $arr2 = range(10, 20);
+    $this->measure('array_merge($arr, $arr)', fn() => array_merge($arr1, $arr2));
+    $this->measure('[...$arr, ...$arr]'     , fn() => [...$arr1, ...$arr2]);
 
-    Benchmark::h2('array');
-    BenchMark::measure('array_merge($arr, $arr)', fn() => array_merge($arr1, $arr2));
-    BenchMark::measure('[...$arr, ...$arr]'     , fn() => [...$arr1, ...$arr2]);
+    $this->h2('hash:no_duplicated');
 
     $arr1 = array_fill_keys(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'], 'apple');
     $arr2 = array_fill_keys(['i', 'j', 'k', 'l', 'm', 'n', 'o', 'p'], 'banana');
+    $this->measure('array_merge($arr, $arr)', fn() => array_merge($arr2, $arr1));
+    $this->measure('$array + $array'        , fn() => $arr1 + $arr2);
 
-    Benchmark::h2('hash');
-    Benchmark::h3('no_duplicated');
-    BenchMark::measure('array_merge($arr, $arr)', fn() => array_merge($arr2, $arr1));
-    BenchMark::measure('$array + $array'        , fn() => $arr1 + $arr2);
+    $this->h2('hash:many_duplicated');
 
     $arr1 = array_fill_keys(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'], 'apple');
     $arr2 = array_fill_keys(['a', 'b', 'c', 'd', 'e', 'x', 'y', 'z'], 'banana');
+    $this->measure('$array + $array', fn() => $arr1 + $arr2);
+    $this->measure('array_merge()'  , fn() => array_merge($arr2, $arr1));
 
-    Benchmark::h3('many_duplicated');
-    BenchMark::measure('$array + $array', fn() => $arr1 + $arr2);
-    BenchMark::measure('array_merge()'  , fn() => array_merge($arr2, $arr1));
+    $this->h2('extract');
 
     $arr = array_flip(['a', 'b', 'c', 'd', 'e']);
+    $this->measure('$arr["k"]', fn() => $arr['a'] && $arr['b'] && $arr['c'] && $arr['d']);
+    $this->measure('extract()', fn() => extract($arr));
 
-    Benchmark::h2('extract');
-    BenchMark::measure('$arr["k"]', fn() => $arr['a'] && $arr['b'] && $arr['c'] && $arr['d']);
-    BenchMark::measure('extract()', fn() => extract($arr));
+    $this->h2('compact');
 
     $a = $b = $c = $d = 1;
+    $this->measure('["k" => ]', fn() => ['a' => $a, 'b' => $b, 'c' => $c, 'd' => $d]);
+    $this->measure('compact()', function() use ($a, $b, $c, $d) { compact('a', 'b', 'c', 'd'); });
 
-    Benchmark::h2('compact');
-    BenchMark::measure('["k" => ]', function() use ($a, $b, $c, $d) { ['a' => $a, 'b' => $b, 'c' => $c, 'd' => $d]; });
-    BenchMark::measure('compact()', function() use ($a, $b, $c, $d) { compact('a', 'b', 'c', 'd'); });
+    $this->h2('class_property');
 
-    Benchmark::h2('class_property');
-    BenchMark::measure('$this->objectProp'  , fn() => $this->objectProp);
-    BenchMark::measure('self::$staticProp'  , fn() => self::$staticProp);
-    BenchMark::measure('static::$staticProp', fn() => static::$staticProp);
+    $this->measure('$this->objectProp'  , fn() => $this->objectProp);
+    $this->measure('self::$staticProp'  , fn() => self::$staticProp);
+    $this->measure('static::$staticProp', fn() => static::$staticProp);
 
-    Benchmark::h2('class_method');
-    BenchMark::measure('$this->objectMethod()'  , fn() => $this->objectMethod());
-    BenchMark::measure('self::$staticMethod()'  , fn() => self::staticMethod());
-    BenchMark::measure('static::$staticMethod()', fn() => static::staticMethod());
+    $this->h2('class_method');
+
+    $this->measure('$this->objectMethod()'  , fn() => $this->objectMethod());
+    $this->measure('self::$staticMethod()'  , fn() => self::staticMethod());
+    $this->measure('static::$staticMethod()', fn() => static::staticMethod());
+
+    $this->h2('call_user_func');
 
     $class   = self::class;
     $method  = 'staticMethod';
     $method2 = "{$class}::{$method}";
+    $this->measure('$class::$method()'      , fn() => $class::$method());
+    $this->measure('[$class, $method]()'    , fn() => [$class, $method]());
+    $this->measure('func([$class, $method])', fn() => call_user_func([$class, $method]));
+    $this->measure("func('class::method')"  , fn() => call_user_func($method2));
 
-    Benchmark::h2('call_user_func');
-    BenchMark::measure('$class::$method()'      , fn() => $class::$method());
-    BenchMark::measure('[$class, $method]()'    , fn() => [$class, $method]());
-    BenchMark::measure('func([$class, $method])', fn() => call_user_func([$class, $method]));
-    BenchMark::measure("func('class::method')"  , fn() => call_user_func($method2));
+    $this->h2('closure');
 
-    Benchmark::h2('closure');
-    BenchMark::measure('function()', function() { (function() { return 0; })(); });
-    BenchMark::measure('fn() =>'   , function() { (fn() => 0)(); });
+    $this->measure('function()', function() { (function() { return 0; })(); });
+    $this->measure('fn() =>'   , function() { (fn() => 0)(); });
 
-    Benchmark::h2('file');
-    BenchMark::measure('is_file()'    , fn() => is_file(__FILE__));
-    BenchMark::measure('is_dir()'     , fn() => is_dir(__DIR__));
-    BenchMark::measure('file_exists()', fn() => file_exists(__FILE__));
+    $this->h2('file');
 
-    print "\n";// End of Benchmark
+    $this->measure('is_file()'    , fn() => is_file(__FILE__));
+    $this->measure('is_dir()'     , fn() => is_dir(__DIR__));
+    $this->measure('file_exists()', fn() => file_exists(__FILE__));
+
+    print "\n";
   }
 };

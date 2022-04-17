@@ -40,25 +40,18 @@ class Dump {
 
   protected static function renderCli() {
     if (!self::$logs) return;
-    print '+' . str_repeat('-', 39) . "\n";
+    print "\n+" . str_repeat('-', 14) . " dump\n";
     print join("\n", self::$logs) . "\n\n" . self::elapsed() . "\n";
-    print str_repeat('-', 39) . '+' . "\n";
+    print str_repeat('-', 19) . '+' . "\n";
   }
 
   protected static function renderHtml() {
+    $styles = self::styles();
     $data = join("\n", self::$logs);
-    foreach (explode("\n", $data) as $line) {
-      $size[] = mb_strwidth($line);
-    }
-
-    $width = 8 * max($size ?? []);
-    $height = 16 * count($size) + 15;
-    $styles = self::style($width, $height);
 
     $h = '';
     if (strlen($data)) {
-      $h .= '<textarea style="' . $styles[0] . '" spellcheck="false" readonly>' . "\n";
-      $h .= h($data) . '</textarea>';
+      $h .= '<div style="' . $styles[0] . '">' . h($data) . '</div>';
     }
     $h .= '<div style="' . $styles[1] . '">' . "\n";
     $h .= self::elapsed() . '</div>';
@@ -68,19 +61,21 @@ class Dump {
     print substr_replace($buf, $h, $pos, 0);
   }
 
-  protected static function style($width, $height) {
+  protected static function styles() {
     $background = "
       position: fixed; z-index: 1080; left: 3px;
-      background: rgba(30,34,38,.88);
+      background: rgba(0,0,0,.78);
       box-shadow: 1px 1px 5px rgba(0,0,0,.6);
-      color: #c2c2c2; font: 12px/1.4 'Segoe UI',monospace;
+      color: #c2c2c2;
+      font: 12px/1.3 var(--bs-font-monospace);
     ";
     $styles[] = "
       display: block; {$background} bottom: 50px;
-      width: min({$width}px, calc(100vw - 55px)); min-width: 200px;
-      height: min({$height}px, calc(100vh - 70px)); min-height: 50px;
-      padding: 5px 6px; border: 0;
-      resize: none; outline:0 !important; -webkit-appearance:none;
+      overflow: auto;
+      min-width: 200px; max-width: 80vw;
+      max-height: calc(100vh - 120px);
+      padding: 5px 6px;
+      white-space: pre-wrap;
       word-spacing: .25rem;
     ";
     $styles[] = "

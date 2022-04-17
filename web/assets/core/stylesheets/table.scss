@@ -11,24 +11,27 @@
     vertical-align: top;
   }
   > :not(caption) > * > th {
-    border: 1px solid var(--border-gray2-color);
-    background: var(--back-gray2-color);
+    border: 1px solid var(--border-color-gray2);
+    background: var(--back-color-gray2);
   }
   > :not(caption) > * > td {
-    border: 1px solid var(--border-gray1-color);
-    background: var(--back-white-color);
+    border: 1px solid var(--border-color-gray1);
+    background: var(--back-color-white);
   }
   > :not(caption) > :last-child > * {
-    border-bottom-color: var(--border-gray2-color);
+    border-bottom-color: var(--border-color-gray2);
+  }
+  > :not(caption) > * > :first-child {
+    border-left-color: var(--border-color-gray2);
   }
   > :not(caption) > * > :last-child {
-    border-right-color: var(--border-gray2-color);
+    border-right-color: var(--border-color-gray2);
   }
   > :not(caption) > .js-link-row:hover > th {
-    background: #e1e1e1;
+    background: var(--back-color-gray2-hover);
   }
   > :not(caption) > .js-link-row:hover > td {
-    background: #fbfbfb;
+    background: var(--back-color-white-hover);
   }
   .th-icon, .td-icon {
     width: 34px;
@@ -63,10 +66,11 @@
     border-top-width: 1px;
   }
   > :not(caption) > * > .sticky-start:first-child {
+    width: 35px;
     border-left-width: 1px;
   }
   > :not(caption) > * > .sticky-start:nth-child(2) {
-    left: 34px;
+    left: 35px;
   }
   > thead > * > th {
     position: -webkit-sticky;
@@ -81,37 +85,43 @@
 
 // Table - db
 .data-table.table-db {
-  > tbody > * > td {
-    &.type-integer, &.type-double, &.type-float {
+  .db-value {
+    color: #092;
+    &.db-type-string {
+      color: inherit;
+    }
+    &.db-type-null {
+      color: #999;
+    }
+    &.db-type-bool {
+      color: #555;
+    }
+    &.db-type-int,
+    &.db-type-double,
+    &.db-type-float,
+    &.db-type-decimal128 {
       color: #05e;
       text-align: right;
     }
-    &.type-boolean {
-      color: #05e;
-    }
-    &.type-array {
+    &.db-type-array,
+    &.db-type-hash {
       color: #b44;
+      &.text-break { font-family: var(--bs-font-monospace); }
     }
-    &.type-object {
-      color: #092;
-    }
-    &.type-null {
-      color: #999;
-    }
-    .js-clipboard-copy {
-      margin-left: .5rem;
-    }
-    .pre-value {
-      max-height: 12rem;
-      margin: 0;
-      font: inherit;
-      white-space: pre-wrap;
-    }
-    .input-json {
-      width: calc(100vw - 85px);
-      height: calc(100vh - 175px);
-      padding: .5rem;
-      line-height: 1.2;
-    }
+  }
+  .pre-value {
+    max-height: 12rem;
+    margin: 0;
+    font: inherit;
+    white-space: pre-wrap;
+  }
+  .js-clipboard-copy {
+    margin-left: .5rem;
+  }
+  .input-json {
+    width: calc(100vw - 85px);
+    height: calc(100vh - 178px);
+    padding: .5rem;
+    line-height: 1.2;
   }
 }

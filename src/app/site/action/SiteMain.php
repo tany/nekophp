@@ -1,5 +1,5 @@
 <?php
-namespace site\action;
+namespace site\actions;
 
 class SiteMain extends \core\Action {
 

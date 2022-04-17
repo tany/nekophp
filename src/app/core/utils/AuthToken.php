@@ -3,8 +3,8 @@ namespace core\utils;
 
 use \core\storage\Cookie;
 use \core\storage\Session;
-use \core\utils\Crypt;
-use \core\model\User;
+use \core\utils\crypto\Crypto;
+use \core\models\User;
 
 class AuthToken {
 
@@ -15,7 +15,7 @@ class AuthToken {
   public static function authenticate() {
     if (!$token = Cookie::get('authToken')) return;
 
-    $data = explode(';', Crypt::decrypt($token));
+    $data = explode(';', Crypto::decrypt($token));
     if (count($data) !== 4) return self::logout();
 
     [$id, $time, $cip, $cua] = $data;
@@ -40,7 +40,7 @@ class AuthToken {
 
   public static function login($user) {
     $token = join(';', [$user->id, TIME, REAL_IP, self::hashUserAgent()]);
-    Cookie::set('authToken', Crypt::encrypt($token));
+    Cookie::set('authToken', Crypto::encrypt($token));
     return $user;
   }
 

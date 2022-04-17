@@ -8,34 +8,29 @@ use \ci\NestedNode;
 
 class ActionTest extends TestCase {
 
-  public static $browser;
-  public static $page;
-  public static $navigation;
+  public static $userAgent = 'HeadlessChrome';
   public static $baseUrl = 'http://neko.vm';
-  public static $userAgent = 'HeadlessChrome LocalTest';
+  public $browser;
+  public $page;
 
   public static function setupBrowser() {
-    if (self::$browser) return;
-
     $factory = new BrowserFactory('google-chrome');
-    self::$browser = $factory->createBrowser([
+
+    return $factory->createBrowser([
       'userAgent' => self::$userAgent,
     ]);
-    self::$page = self::$browser->createPage();
-    self::clearScreenshot();
-
-    print "====================\n";
-    print "# PHPUnit \n";
-    print "- google-chrome\n";
-    print "- " . self::$baseUrl . "\n";
-    print "====================\n";
   }
 
-  public static function closeBrowser() {
-    if (self::$browser) self::$browser->close();
+  public static function setupPage($browser) {
+    print "--------------------\n";
+    print "# PHPUnit \n\n";
+    print "  URL: " . self::$baseUrl . "\n";
+    print "  UserAgent: " . self::$userAgent . "\n";
+
+    return $browser->createPage();
   }
 
-  public static function clearScreenshot() {
+  public function clearScreenshot() {
     foreach (glob('tmp/ss-*.png') as $file) {
       unlink($file);
     }
@@ -45,23 +40,31 @@ class ActionTest extends TestCase {
     static $count;
     $count += 1;
     $filename ??= sprintf('ss-%02d.png', $count);
-    self::$page->screenshot()->saveToFile("tmp/{$filename}");
+    $this->page->screenshot()->saveToFile("tmp/{$filename}");
+  }
+
+  public function beforeAll() {
+    //
+  }
+
+  public function afterAll() {
+    //
   }
 
   public function visit($url) {
     $url = $url[0] === '/' ? self::$baseUrl . $url : $url;
     print "\n  " . str_shift($url, self::$baseUrl) . ' ... ';
 
-    self::$navigation = self::$page->navigate($url);
-    return self::$navigation->waitForNavigation();
+    $navigation = $this->page->navigate($url);
+    return $navigation->waitForNavigation();
   }
 
   public function get($code) {
-    return self::$page->evaluate($code)->getReturnValue();
+    return $this->page->evaluate($code)->getReturnValue();
   }
 
   public function find($selector) {
-    return self::$page->dom()->querySelector($selector);
+    return $this->page->dom()->querySelector($selector);
   }
 
   public function name($name) {
@@ -74,16 +77,16 @@ class ActionTest extends TestCase {
     return $this->within($selector);
   }
 
-  public function link($selector) {
+  public function link($selector, $timeout = 2000) {
     print "l";
-    $evaluation = self::$page->evaluate("(() => { document.querySelector('{$selector}').click(); })()");
-    $evaluation->waitForPageReload(Page::LOAD, 2000); // ms
+    $evaluation = $this->page->evaluate("(() => { document.querySelector('{$selector}').click(); })()");
+    $evaluation->waitForPageReload(Page::LOAD, $timeout); // ms
   }
 
-  public function submit($selector) {
-    print "s";
-    $evaluation = self::$page->evaluate("(() => { document.querySelector('{$selector}').click(); })()");
-    $evaluation->waitForPageReload(Page::LOAD, 5000); // ms
+  public function submit($selector, $timeout = 2000) {
+    print "b";
+    $evaluation = $this->page->evaluate("(() => { document.querySelector('{$selector}').click(); })()");
+    $evaluation->waitForPageReload(Page::LOAD, $timeout); // ms
   }
 
   public function within($selector) {

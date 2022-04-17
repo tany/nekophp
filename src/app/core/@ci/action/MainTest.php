@@ -5,7 +5,7 @@ return new class extends \ci\ActionTest {
   public function __invoke() {
     // Home
     $this->visit('/');
-    $el = $this->find('.page-article-title');
+    $el = $this->find('.article-title');
     $this->assertSame($el->getText(), 'Home');
 
     // Login

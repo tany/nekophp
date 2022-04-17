@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title><?= lc('--application.name') ?></title>
-<meta name="description" content="<?= lc('--description') ?>">
+<meta name="description" content="<?= lc('--application.description') ?>">
 <link href="/favicon.png" rel="shortcut icon" type="image/png">
 <link href="/favicon.png" rel="apple-touch-icon">
 <!--

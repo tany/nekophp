@@ -1,8 +1,8 @@
-<article class="page-article">
-  <header class="page-article-header">
-    <h1 class="page-article-title">Examples</h1>
+<article class="article">
+  <header class="article-header">
+    <h1 class="article-title">Examples</h1>
   </header>
-  <div class="page-article-body">
+  <div class="article-body">
 
     <div class="table-responsive">
       <table class="data-table">
@@ -21,7 +21,7 @@
           @end
 
           <tr><td>#&#123;func()}</td><td>
-            #{lc('--alert.created')}
+            {\lc('--alert.created')}
 
           </td></tr><tr><td>Javascript</td><td>
             <a href="#" onclick="core.Modal.alert({ message: moment() }); return false">moment</a>
@@ -63,23 +63,35 @@
       </table>
     </div>
 
-    <nav class="mt-4">
+    <nav class="mt-md">
       <?= paginate(['total' => 10_000]) ?>
     </nav>
   </div>
 </article>
 
-<article class="page-article">
-  <div class="page-article-body">Body</div>
-</article>
+<div class="row">
+  <div class="col-8">
+    <article class="article">
+      <header class="article-header">
+        <h1 class="article-title">Article Header</h1>
+      </header>
+      <div class="article-body">Article Body</div>
+    </article>
 
-<section class="page-section">
-  <header class="page-section-header">
-    <h1 class="page-section-title">Header</h1>
-  </header>
-  <div class="page-section-body">Body</div>
-</section>
+    <article class="article">
+      <div class="article-body">Article Body</div>
+    </article>
+  </div>
+  <div class="col-4">
+    <section class="section">
+      <header class="section-header">
+        <h1 class="section-title">Section Header</h1>
+      </header>
+      <div class="section-body">Section Body</div>
+    </section>
 
-<section class="page-section">
-  <div class="page-section-body">Body</div>
-</section>
+    <section class="section">
+      <div class="section-body">Section Body</div>
+    </section>
+  </div>
+</div>

@@ -3,7 +3,7 @@
 return [
 
   // Application version
-  '--version' => '0.0.4',
+  '--version' => '0.0.5',
 
   // Environment Mode (development, production)
   '--mode' => 'development',
@@ -17,7 +17,7 @@ return [
   // Multilingual Localization
   '--multilingual' => [],
 
-  // Crypt Parameters (phrase: 32 digits, iv: 16 digits)
+  // Encrypt Parameters (phrase: 32 digits, iv: 16 digits)
   '--crypt.phrase' => 'a95789d0c1895d855180a4ff920b2cb9', // bin2hex(openssl_random_pseudo_bytes(16))
   '--crypt.iv' => '8a47b1330602fc1c', // bin2hex(openssl_random_pseudo_bytes(8))
 
@@ -34,7 +34,7 @@ return [
   '--cache.path' => TMP . '/cache',
 
   // Log File
-  '--log.file' => LOG . '/application.log',
+  // '--log.file' => LOG . '/application.log',
 
   // Internal Redirection (X-Accel-Redirect, X-SendFile)
   '--action.internalRedirection' => 'X-Accel-Redirect',

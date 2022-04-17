@@ -3,7 +3,9 @@ namespace core;
 
 class Loader {
 
-  public static function initialize($root) {
+  public static function initialize($root = null) {
+    $root ??= dirname(__DIR__, 3);
+
     define('ROOT', $root);
     define('CNF', "{$root}/conf");
     define('LOG', "{$root}/log");

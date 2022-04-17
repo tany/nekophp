@@ -2,11 +2,12 @@
 
 return new class extends \ci\ActionTest {
 
-  public $database = '_test_';
-  public $collection = 'coll';
+  public $database;
+  public $collection;
 
-  public function __construct() {
-    $this->database .= time();
+  public function beforeAll() {
+    $this->database = 'ci_test_' . time();
+    $this->collection = 'coll';
   }
 
   public function __invoke() {
@@ -33,7 +34,7 @@ return new class extends \ci\ActionTest {
     $this->click('.data-table thead .dropend')->link('.js-link-next');
     $this->submit('.js-rest-create');
 
-    $this->link('.page-main-footer .btn:first-child');
+    $this->link('.main-footer .btn:first-child');
     $this->submit('.js-rest-update');
 
     $this->click('.js-rest-delete');

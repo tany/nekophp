@@ -1,9 +1,9 @@
 <?php
-namespace sns\action\team;
+namespace sns\actions\team;
 
 class TeamMain extends \core\Action {
 
-  use \core\action\LoginFilter;
+  use \core\actions\LoginFilter;
 
   public function index($request) {
     ;

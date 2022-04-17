@@ -38,7 +38,7 @@ class Parser {
   }
 
   protected static function addRoute(&$routes, $path, $class, $action) {
-    $class = substr_replace($class, '/action/', strpos($class, '/'), 1);
+    $class = substr_replace($class, '/actions/', strpos($class, '/'), 1);
     $class = strtr($class, '/', '\\');
     $route = [$class, $action];
 

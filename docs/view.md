@@ -9,13 +9,13 @@
 
 ## Method
 ```
-#{time()}
+{\time()}
 ```
 
 ## Syntax
 ```
 @if $user
-  <span>#{$user->name}</span>
+  <span>{$user->name}</span>
 @else
   <span>no user</span>
 @end

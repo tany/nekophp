@@ -1,9 +1,11 @@
 export default class Form {
 
-  // TODO:
   static disableAjaxSubmit(el) {
+    document.querySelectorAll('.js-rest-create, .js-rest-update, .js-ajax-submit').forEach(el => {
+      const elClone = el.cloneNode(true);
+      el.parentNode.replaceChild(elClone, el);
+    });
     el.classList.add('disabled');
-    $('.js-rest-create, .js-rest-update').off('click');
   }
 
   static disableEnter(el) {

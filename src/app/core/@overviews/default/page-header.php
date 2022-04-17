@@ -7,16 +7,16 @@
     <div class="dropdown">
       <span class="link-light user-icon" role="button" data-bs-toggle="dropdown" aria-expanded="false">
         <i class="bi bi-32 bi-person-circle display-7"><!----></i>
-        <span class="visually-hidden">#{Core::$user->name}</span>
+        <span class="visually-hidden">{\Core::$user->name}</span>
       </span>
 
       <ul class="dropdown-menu dropdown-menu-end">
-        <li><a class="dropdown-item" href="/@#{Core::$user->name}">#{Core::$user->name}</a></li>
+        <li><a class="dropdown-item" href="/@{\Core::$user->name}">{\Core::$user->name}</a></li>
         <li><hr class="dropdown-divider"></li>
         <li><a class="dropdown-item" href="#">Your Profile</a></li>
         <li><a class="dropdown-item" href="#">Your ...</a></li>
         <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item" href="#" onclick="core.disableAjaxSubmit(this); return false">Disable ajaxSubmit</a></li>
+        <li><a class="dropdown-item" href="#" onclick="core.Form.disableAjaxSubmit(this); return false">Disable ajaxSubmit</a></li>
         <li><hr class="dropdown-divider"></li>
         <li><a class="dropdown-item js-link-ajax id-logout" href="/logout">Sign out</a></li>
       </ul>

@@ -17,7 +17,9 @@ class Core {
   public static $site;
 
   public static function initialize() {
-    class_alias(self::class, 'Core'); // for view
+    class_alias(\core\Core::class, 'Core'); // for view
+    class_alias(\core\features\Hash::class, 'Hash');
+    class_alias(\core\utils\string\Regexp::class, 'Regexp');
 
     define('ENV', $_ENV); //filter_input_array(INPUT_ENV));
     define('SERVER', $_SERVER); //filter_input_array(INPUT_SERVER));
@@ -40,7 +42,7 @@ class Core {
     define('APPS', Cache::get('core.apps', fn() => ls_dir(APP)));
 
     Setting::$data = Setting::load();
-    Log::initialize($conf['--log.file']);
+    Log::initialize($conf['--log.file'] ?? null);
     Locale::initialize($conf['--lang']);
     Session::initialize('s' . HASH);
   }

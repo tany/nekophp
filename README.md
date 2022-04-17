@@ -70,6 +70,7 @@ bin/lint phpmd  # PHP Mess Detector
 
 ## Release Notes
 
+- 0.0.5 Some fixes
 - 0.0.4 Some fixes
 - 0.0.3 Elasticsearch stats
 - 0.0.2 Elasticsearch index

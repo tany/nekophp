@@ -8,8 +8,8 @@ use \core\logger\Dump;
 use \core\logger\Log;
 use \core\storage\Cookie;
 use \core\storage\Session;
-use \core\utils\Pager;
-use \core\utils\Stash;
+use \core\utils\html\Pager;
+use \core\utils\string\Stash;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Core

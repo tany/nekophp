@@ -37,8 +37,8 @@ class Compiler {
     // {$var}
     $data = preg_replace_callback('/\{(\$\w.*?)\}/', [self::class, 'compileVar'], $data);
 
-    // #{exp}
-    $data = preg_replace_callback('/#\{(.+?)\}/', [self::class, 'compileExp'], $data);
+    // {\exp}
+    $data = preg_replace_callback('/\{(\\\\\w.*?)\}/', [self::class, 'compileExp'], $data);
 
     // adjust _
     $data = preg_replace('/ _$/m', "\n", $data);

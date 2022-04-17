@@ -2,10 +2,10 @@
 
 return new class extends \ci\ActionTest {
 
-  public $index = 'test_';
+  public $index;
 
-  public function __construct() {
-    $this->index .= time();
+  public function beforeAll() {
+    $this->index = 'ci_test_' . time(); // Starts with the alphabet
   }
 
   public function __invoke() {
@@ -27,7 +27,7 @@ return new class extends \ci\ActionTest {
     $this->click('.data-table thead .dropend')->link('.js-link-next');
     $this->submit('.js-rest-create');
 
-    $this->link('.page-main-footer .btn');
+    $this->link('.main-footer .btn');
     $this->submit('.js-rest-update');
 
     $this->click('.js-rest-delete');

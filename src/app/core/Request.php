@@ -3,7 +3,7 @@ namespace core;
 
 class Request {
 
-  use \core\feature\Accessor;
+  use \core\features\Accessor;
 
   protected $url;
   protected $method;

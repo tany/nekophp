@@ -1,56 +1,94 @@
 <?php
 
-use \core\Loader;
-use \core\Router;
+use \core\error\ErrorReport;
+use \core\logger\Log;
 use \ci\ActionTest;
 
-$root = dirname(__DIR__, 3);
-require $root . '/src/app/core/Loader.php';
-
-Loader::initialize($root);
-Loader::include(APP, LIB);
-Router::initialize();
-ob_end_flush();
+require 'src/app/core/@conf/boot.php';
 
 $paths = ($argc > 1) ? array_slice($argv, 1) : [APP . '/*/@ci'];
-$files = [];
 
-foreach ($paths as $path) {
-  if (str_ends_with($path, '.php')) {
-    $files[] = $path;
-  } else {
-    array_push($files, ...explode("\n", trim(`find {$path} -name "?*Test.php"`)));
+new class($paths) {
+
+  public function __construct($paths) {
+    Log::clear();
+    ob_end_flush();
+
+    $browser = ActionTest::setupBrowser();
+    $page = ActionTest::setupPage($browser);
+    $this->showTitle('Tests');
+
+    foreach ($this->findFiles($paths) as $file) {
+      if (!preg_match('/@ci\/.*Test\.php$/', $file)) continue;
+
+      try {
+        print "\n" . str_sub(ROOT . '/', '', $file);
+        $test = require $file;
+        $test->browser = $browser;
+        $test->page = $page;
+        $test->clearScreenshot();
+        $test->beforeAll();
+        $test->__invoke();
+        $test->afterAll();
+        print "\n";
+      } catch (\Exception | \Error $e) {
+        if (isset($test)) $test->screenshot('ss-exception.png');
+
+        $message = preg_replace('/\(Session .*/', '', trim($e->getMessage()));
+        if (!$message) $message = 'Uncaught ' . $e::class;
+        print "\n\nError: {$message}\n";
+
+        new ErrorReport($e);
+        $errors[] = ob_get_clean();
+      }
+    }
+
+    $browser->close();
+    $this->showResults($errors ?? []);
+    $this->showLog();
+
+    exit(empty($errors) ? 0 : 1);
   }
-}
 
-ActionTest::setupBrowser();
+  public function findFiles($paths) {
+    $files = [];
 
-try {
-  foreach ($files as $file) {
-    if (!preg_match('/@ci\/.*Test\.php$/', $file)) continue;
-
-    print "\n{$file}";
-    $test = require $file;
-    $test->__invoke();
+    foreach ($paths as $path) {
+      if (str_ends_with($path, '.php')) {
+        $files[] = $path;
+      } else {
+        array_push($files, ...explode("\n", trim(`find {$path} -name "?*Test.php"`)));
+      }
+    }
+    return $files ?? [];
   }
-} catch (\Exception $e) {
-  $test->screenshot('ss-exception.png');
-  $message = preg_replace('/\(Session .*/', '', trim($e->getMessage()));
-  if (!$message) $message = 'Uncaught ' . get_class($e);
-  $trace = preg_replace('/(\(\d+\)).*/', '$1', $e->getTraceAsString());
-  $trace = preg_replace("/\n/", "\n  ", $trace);
-  $errors[] = "{$message}\n\n  $trace";
-}
 
-ActionTest::closeBrowser();
+  protected function showTitle($title) {
+    print "\n--------------------\n";
+    print "# {$title}\n";
+  }
 
-if (empty($errors)) {
-  $time = number_sigfig((microtime(true) - TIME_FLOAT) * 1000);
-  print "\n\nTests are finished. ({$time} ms)\n";
-} else {
-  foreach ($errors as $key => $val) print "\n[{$key}] {$val}\n";
-  exit(count($errors));
-}
+  protected function showResults($errors) {
+    if ($errors) return $this->showErrors($errors);
+
+    $this->showTitle("Results\n");
+    $time = number_sigfig((microtime(true) - TIME_FLOAT) * 1000);
+    print "Tests are successful. ({$time} ms)\n\n";
+  }
+
+  protected function showErrors($errors) {
+    $this->showTitle("CLI Error");
+    foreach ($errors as $error) print "\n" . trim($error) . "\n";
+    print "\n";
+  }
+
+  protected function showLog() {
+    if (!$log = Log::read()) return;
+
+    $this->showTitle("Application Log\n");
+    print "{$log}\n";
+  }
+};
 
 /*
   HeadlessChromium\Dom\Node methods

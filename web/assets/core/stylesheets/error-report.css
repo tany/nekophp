@@ -1,5 +1,5 @@
 :root {
-  --border-gray1-color: #ccc;
+  --border-color-gray1: #ccc;
   --sans-serif: system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans','Liberation Sans',sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji';
   --monospace: 'Roboto Mono',SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono','Courier New',monospace;
 }
@@ -33,11 +33,11 @@ body {
 }
 .error-section {
   margin-top: 1rem;
-  border: 1px solid var(--border-gray1-color);
+  border: 1px solid var(--border-color-gray1);
 }
 .error-section-header {
   padding: .5rem 1rem;
-  border-bottom: 1px solid var(--border-gray1-color);
+  border-bottom: 1px solid var(--border-color-gray1);
   background: #eaeaea;
 }
 .error-section-body {
@@ -61,7 +61,7 @@ body {
 }
 .error-table td:first-child {
   width: 5rem;
-  border-right: 1px solid var(--border-gray1-color);
+  border-right: 1px solid var(--border-color-gray1);
   color: #888;
   text-align: right;
 }

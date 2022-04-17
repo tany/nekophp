@@ -85,7 +85,6 @@ jobs:
       - name: Other Settings
         run: |
           cp conf/examples/settings.php conf/
-          touch log/application.log
           chmod -R 777 log tmp
 
       - name: Test!

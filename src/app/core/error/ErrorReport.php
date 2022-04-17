@@ -16,10 +16,10 @@ class ErrorReport {
     while (ob_get_level()) ob_get_clean();
     ob_start();
 
-    match (get_class($e)) {
-      'Elasticsearch\Common\Exceptions\BadRequest400Exception' => $this->setElasticTitle($e),
-      'MongoDB\Driver\Exception\BulkWriteException' => $this->setMongoTitle($e),
-      default => $this->setDefaultTitle($e),
+    match ($e::class) {
+      'Elasticsearch\Common\Exceptions\BadRequest400Exception' => $this->setElasticException($e),
+      'MongoDB\Driver\Exception\BulkWriteException' => $this->setMongoException($e),
+      default => $this->setDefaultException($e),
     };
 
     if (ACCEPT === 'application/json') {
@@ -38,13 +38,14 @@ class ErrorReport {
     self::$uncompiledFile ??= $file;
   }
 
-  protected function setDefaultTitle($e) {
-    $this->title = ErrorCode::TEXTS[$e->getCode()] ?? 'Script Error';
+  protected function setDefaultException($e) {
+    // $this->title = ErrorCode::TEXTS[$e->getCode()] ?? 'Script Error';
+    $this->title = ucwords(str_space($e::class));
     $this->message = $e->getMessage();
-    if (!$this->message) $this->message = 'Uncaught ' . get_class($e);
+    if (!$this->message) $this->message = 'Uncaught ' . $e::class;
   }
 
-  protected function setElasticTitle($e) {
+  protected function setElasticException($e) {
     $json = json_decode($e->getMessage(), true);
 
     $this->title = '[elastic] ' . ($json['error']['type'] ?? 'exception');
@@ -56,7 +57,7 @@ class ErrorReport {
     // http_response_code($json['status']);
   }
 
-  protected function setMongoTitle($e) {
+  protected function setMongoException($e) {
     foreach ($e->getWriteResult()->getWriteErrors() as $err) $msg[] = $err->getMessage();
     $this->title = 'MongoDB Error';
     $this->message = join('; ', $msg ?? []);
@@ -116,7 +117,7 @@ class ErrorReport {
   protected function tailLog() {
     if (!is_file($file = Log::$file)) return [];
     $size = filesize($file);
-    $data = file_get_contents(Log::$file, false, null, $size - 2500, 2500);
+    $data = file_get_contents(Log::$file, false, null, max(0, $size - 2500));
     foreach (explode("\n", trim($data)) as $line) {
       $logs[] = ['key' => '-', 'val' => $line];
     }

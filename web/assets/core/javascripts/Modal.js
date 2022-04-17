@@ -41,16 +41,16 @@ export default class Modal {
   }
 
   static getTemplate(params = {}) {
-    if (params.body) params.body = Modal.convertBody(params.body);
+    let header, footer, body;
+    if (params.header) header =  `<div class="modal-header">${params.header}</div>`
+    if (params.footer) footer =  `<div class="modal-footer">${params.footer}</div>`
+    if (params.body) body = `<div class="modal-body">${Modal.convertBody(params.body)}</div>`;
 
     return $(`
       <div id="${Modal.id}" class="modal" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable ${params.class}">
-      <div class="modal-content">
-        <div class="modal-header">${params.header ?? ''}</div>
-        <div class="modal-body">${params.body ?? ''}</div>
-        <div class="modal-footer">${params.footer ?? ''}</div>
-      </div></div></div>
+      <div class="modal-content">${header ?? ''}${body ?? ''}${footer ?? ''}</div>
+      </div></div>
     `);
   }
 

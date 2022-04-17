@@ -10,7 +10,7 @@
   <tbody>
     <tr>
       <th class="th-icon unlink"></th>
-      <td class="input-json">
+      <td>
         <input type="text" class="form-control" placeholder="Collection Name" autocomplete="off"
           name="data[name]" value="{$this->item}" style="width: 20rem;">
       </td>

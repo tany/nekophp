@@ -10,7 +10,7 @@ class Log {
   protected static $ids;
 
   public static function initialize($file) {
-    self::$file = $file;
+    self::$file = $file ?? LOG . '/' . MODE . '.log';
   }
 
   public static function shutdown() {
@@ -18,6 +18,14 @@ class Log {
       $type = ErrorCode::TEXTS[$e['type']];
       log_warn("{$type}: {$e['message']} in {$e['file']} on line {$e['line']}");
     }
+  }
+
+  public static function clear() {
+    file_put_contents(self::$file, '');
+  }
+
+  public static function read() {
+    return file_get_contents(self::$file);
   }
 
   public static function log($data, $level) {
@@ -43,29 +51,34 @@ class Log {
       $logs[] = '<null>' . "\n";
     } elseif ($data === true || $data === false) {
       $logs[] = var_export($data, true) . ' <bool>' . "\n";
-    } elseif (is_int($data)) {
-      $logs[] = print_r($data, true) . ' <int>' . "\n";
     } elseif (is_string($data)) {
       $logs[] = print_r($data, true) . ' <str>' . "\n";
     } elseif (is_scalar($data)) {
-      $logs[] = print_r($data, true) . ' <' . gettype($data) . '>' . "\n";
+      $logs[] = print_r($data, true) . ' <' . get_debug_type($data) . '>' . "\n";
     } elseif (is_array($data)) {
       $logs[] = '<array>' . "\n";
       foreach ($data as $key => $val) {
-        $logs[] = "{$indent}{$key} : ";
+        $logs[] = "{$indent}{$key}: ";
         self::export($val, $depth + 1, true);
       }
     } elseif (is_object($data)) {
       $id = spl_object_id($data);
-      $logs[] = '<' . get_class($data) . "> #{$id}\n";
+      $logs[] = '<' . $data::class . "> #{$id}\n";
 
       if (!isset(self::$ids[$id])) {
         self::$ids[$id] = true;
         $object = new \ReflectionClass($data);
-        foreach ($object->getProperties() as $key => $prop) {
-          $logs[] = "{$indent}[{$prop->name}] => ";
+        $props = $object->getProperties();
+        foreach ($props as $key => $prop) {
+          $logs[] = "{$indent}\"{$prop->name}\": ";
           $prop->setAccessible(true);
           self::export($prop->getValue($data), $depth + 1, true);
+        }
+        if (!$props) {
+          foreach ($data as $key => $val) {
+            $logs[] = "{$indent}\"{$key}\": ";
+            self::export($val, $depth + 1, true);
+          }
         }
       }
     } else {

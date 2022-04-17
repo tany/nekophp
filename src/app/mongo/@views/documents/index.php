@@ -27,7 +27,7 @@
   <tbody>
     @foreach $this->items as $item
     <? $id = $item->hrefId() ?>
-    <tr class="js-link-row js-link-next" data-id="{$id}" data-href="#{rawurlencode($id)}">
+    <tr class="js-link-row js-link-next" data-id="{$id}" data-href="{\rawurlencode($id)}">
       <th class="th-icon sticky-start unlink">
         @if $id
         <label class="link-expand">
@@ -40,19 +40,19 @@
           data-bs-toggle="dropdown" aria-expanded="false" data-bs-offset="1,2">
           <i class="bi bi-md bi-three-dots-vertical"><!----></i></a>
         <ul class="dropdown-menu dropdown-menu-end">
-          <li><a class="dropdown-item link-primary js-link-next" href="#{rawurlencode($id)}"
+          <li><a class="dropdown-item link-primary js-link-next" href="{\rawurlencode($id)}"
             target="_blank">Open in new tab</a></li>
           <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item link-danger js-rest-delete" href="#{rawurlencode($id)}"
-            data-confirm="#{lc('--confirm.delete')}">Delete</a></li>
+          <li><a class="dropdown-item link-danger js-rest-delete" href="{\rawurlencode($id)}"
+            data-confirm="{\lc('--confirm.delete')}">Delete</a></li>
         </ul>
       </th>
 
       @foreach $this->fields as $name
-      <? $values = $item->values($name); ?>
-      <td class="text-nowrap type-{$values->type}" title="{$values->tips}"
+      <? $val = $item->dbValue($name); ?>
+      <td class="text-nowrap db-value db-type-{$val->type}" title="{$val->tips}"
         data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-custom-class="tooltip-wide">
-        <div class="text-truncate" style="width: 100px;">{$values->cell}</div>
+        <div class="text-truncate" style="width: 100px;">{$val->cell}</div>
       </td>
       @end
     </tr>
@@ -60,6 +60,6 @@
   </tbody>
 </table>
 
-<div class="page-main-footer position-fixed d-flex-center">
+<div class="main-footer footer-fixed">
   <?= $this->items->pager ?>
 </div>

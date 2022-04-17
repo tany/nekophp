@@ -6,17 +6,22 @@
 // Standard
 :root {
   --bs-font-monospace: "Roboto Mono",SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
-  --border-gray1-color: #e5e5e5;
-  --border-gray2-color: #d5d5d5;
-  --back-white-color: #fff;
-  --back-gray1-color: #fafafa;
-  --back-gray2-color: #eaeaea;
-  --link-text-color: #06e;
+  --margin-md: 1.25rem;
+  --padding-md: min(1.25rem, 2.5vw);
+  --border-color-gray1: #d6d8da;
+  --border-color-gray2: #d4d6d8;
+  --back-color-white: #fff;
+  --back-color-white-hover: #fcfcfc;
+  --back-color-gray1: #f8f9fb;
+  --back-color-gray2: #f0f2f4;
+  --back-color-gray2-hover: #e7e8e9;
+  --back-color-header: #404246;
+  --text-color-link: #06e;
   --font-size-sm: 13px;
   --font-size-md: 15px;
 }
 html {
-  background: #f7f7f7;
+  background: #fdfdfd;
   font: 15px/1.5 var(--bs-font-sans-serif);
   &:focus-within { scroll-behavior: smooth; }
 }
@@ -28,12 +33,15 @@ body {
   text-underline-position: under;
   text-rendering: optimizeSpeed;
 }
+h1, h2, h3, h4, h5, h6, dl, ol, ul {
+  margin: 0;
+}
 a {
-  color: var(--link-text-color);
+  color: var(--text-color-link);
   text-decoration: none;
 }
 a:not([class]):hover, .link:hover {
-  color: var(--link-text-color);
+  color: var(--text-color-link);
   text-decoration: 1px solid underline currentColor;
 }
 .unlink {
@@ -54,15 +62,15 @@ input {
 .page-header {
   height: 50px;
   padding: 0 2.5vw;
-  background: #444;
+  background: var(--back-color-header);
 }
 .page-navi {
   gap: min(.5rem, .5vw);
   height: 50px;
   padding: 0 2vw;
   overflow-x: auto;
-  border-bottom: 1px solid var(--border-gray2-color);
-  background: var(--back-gray2-color);
+  border-bottom: 1px solid var(--border-color-gray2);
+  background: var(--back-color-gray2);
   .nav-link.active {
     color: #70d !important;
   }
@@ -73,67 +81,69 @@ input {
 }
 .page-body {
   max-width: 1140px;
-  margin-top: 2rem;
-}
-.main-menu:empty,
-.main-side:empty {
-  display: none;
+  &::before, &::after {
+    content: "";
+    display: block;
+    margin-top: var(--padding-md);
+  }
 }
 .page-footer {
   max-width: 1140px;
   min-height: 8rem;
-  margin: 50px auto 0;
-  border-top: 1px solid var(--border-gray2-color);
+  margin: 40px auto 0;
+  border-top: 1px solid var(--border-color-gray2);
 }
 
 // Main
-.page-main-footer {
-  &.position-fixed {
+.main-menu:empty,
+.main-side:empty {
+  display: none;
+}
+.main-footer {
+  &.footer-fixed {
+    display: flex !important;
+    position: fixed !important;
     z-index: 1;
     bottom: 0;
+    align-items: center !important;
+    justify-content: center !important;
     gap: 1rem;
     width: 100%;
     height: 70px;
-    border-top: 1px solid var(--border-gray2-color);
+    border-top: 1px solid var(--border-color-gray2);
     background: rgba(240, 240, 240, .75);
   }
-  .pagination { margin: 0; }
 }
 
 // Article, Section
-.page-article, .page-section {
-  margin-bottom: 1rem;
-  border: 1px solid var(--border-gray1-color);
-  background: var(--back-white-color);
-  &:last-child() {
-    margin-bottom: 0;
+.article,
+.section {
+  margin-top: var(--margin-md);
+  border: 1px solid var(--border-color-gray1);
+  background: var(--back-color-white);
+}
+.article-header,
+.section-header {
+  padding: var(--padding-md);
+  border-bottom: 1px solid var(--border-color-gray1);
+  // background: url("/assets/core/img/neko_oyako.png") right 0 top 0 / contain no-repeat;
+}
+.article-body,
+.section-body {
+  padding: 0 var(--padding-md);
+  &::before, &::after {
+    content: "";
+    display: block;
+    margin-top: var(--padding-md);
   }
 }
-.page-article {
-  // box-shadow: 1px 1px 2px rgba(0,0,0,.1);
-  .page-article-header, .page-article-body {
-    padding: min(1.5rem, 2.5vw);
-  }
-  .page-article-header {
-    border-bottom: 1px solid var(--border-gray1-color);
-    background: url("/assets/core/img/neko_oyako.png") right 0 top 0 / contain no-repeat;
-  }
-  .page-article-title {
-    margin: 0;
-    font-size: 1.5rem;
-  }
+.article-title {
+  margin: 0;
+  font-size: 1.5rem;
 }
-.page-section {
-  .page-section-header, .page-section-body {
-    padding: min(1rem, 2.5vw) min(1.5rem, 2.5vw);
-  }
-  .page-section-header {
-    border-bottom: 1px solid var(--border-gray1-color);
-  }
-  .page-section-title {
-    margin: 0;
-    font-size: 1rem;
-  }
+.section-title {
+  margin: 0;
+  font-size: 1rem;
 }
 
 // Core DB
@@ -144,8 +154,8 @@ input {
   width: 100%;
   height: 50px;
   padding: 0 1rem;
-  // border-bottom: 1px solid var(--border-gray2-color);
-  background: var(--back-gray2-color);
+  // border-bottom: 1px solid var(--border-color-gray2);
+  background: var(--back-color-gray2);
   .dropdown-menu {
     font-size: var(--font-size-sm);
   }
